@@ -6,8 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Controller\\GardeController' => $baseDir . '/src/Controller/GardeController.php',
+    'App\\Controller\\MainController' => $baseDir . '/src/Controller/MainController.php',
+    'App\\Controller\\UserController' => $baseDir . '/src/Controller/UserController.php',
     'App\\Entity\\Garde' => $baseDir . '/src/Entity/Garde.php',
-    'App\\Entity\\User' => $baseDir . '/src/Entity/User.php',
     'App\\Kernel' => $baseDir . '/src/Kernel.php',
     'App\\Repository\\GardeRepository' => $baseDir . '/src/Repository/GardeRepository.php',
     'App\\Repository\\UserRepository' => $baseDir . '/src/Repository/UserRepository.php',
