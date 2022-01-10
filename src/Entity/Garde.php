@@ -43,33 +43,4 @@ class Garde
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUtilisateur(): Collection
-    {
-        return $this->utilisateur;
-    }
-
-    public function addUtilisateur(User $utilisateur): self
-    {
-        if (!$this->utilisateur->contains($utilisateur)) {
-            $this->utilisateur[] = $utilisateur;
-            $utilisateur->setGarde($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUtilisateur(User $utilisateur): self
-    {
-        if ($this->utilisateur->removeElement($utilisateur)) {
-            // set the owning side to null (unless already changed)
-            if ($utilisateur->getGarde() === $this) {
-                $utilisateur->setGarde(null);
-            }
-        }
-
-        return $this;
-    }
 }

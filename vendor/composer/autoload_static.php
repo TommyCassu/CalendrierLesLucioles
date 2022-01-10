@@ -574,8 +574,10 @@ class ComposerStaticInit9ce285aca8bf95338e24416e3bc74590
     );
 
     public static $classMap = array (
+        'App\\Controller\\GardeController' => __DIR__ . '/../..' . '/src/Controller/GardeController.php',
+        'App\\Controller\\MainController' => __DIR__ . '/../..' . '/src/Controller/MainController.php',
+        'App\\Controller\\UserController' => __DIR__ . '/../..' . '/src/Controller/UserController.php',
         'App\\Entity\\Garde' => __DIR__ . '/../..' . '/src/Entity/Garde.php',
-        'App\\Entity\\User' => __DIR__ . '/../..' . '/src/Entity/User.php',
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
         'App\\Repository\\GardeRepository' => __DIR__ . '/../..' . '/src/Repository/GardeRepository.php',
         'App\\Repository\\UserRepository' => __DIR__ . '/../..' . '/src/Repository/UserRepository.php',
