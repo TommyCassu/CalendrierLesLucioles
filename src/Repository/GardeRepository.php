@@ -22,7 +22,7 @@ class GardeRepository extends ServiceEntityRepository
     // /**
     //  * @return Garde[] Returns an array of Garde objects
     //  */
-    /*
+    /*bin
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('g')
