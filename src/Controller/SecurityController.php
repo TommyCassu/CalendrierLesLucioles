@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +34,7 @@ class SecurityController extends AbstractController
             $user->setPassword($hashedPassword);
             $manager->persist($user);
             $manager->flush();
+            return new RedirectResponse('main');
         }
         return $this->render('security/registration.html.twig', [
             'form' => $form->createView(),

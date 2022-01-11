@@ -1,9 +1,55 @@
 {% extends 'base.html.twig' %}
 {% block title %}Formulaire d'inscription{% endblock %}
 {% block body %}
-        <h1>Formulaire d'inscription</h1>
     {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-success">Inscription</button>
-    {{ form_end(form)}}
+    <div class="absolute w-screen h-screen flex flex-col justify-center bg-yellow-300 ">
+    
+        <div class="px-10 w-auto p-4 shadow-2xl mx-auto rounded-2xl bg-white justify-center">
+            <div class="px-10 w-96 p-4 mx-auto">
+                
+                <div class="flex justify-center text-4xl font-extrabold">
+                    <h1>Inscription</h1>
+                </div>
+                
+                <div class="mt-5">
+                    {{ form_row(form.username,{"label":"Nom d'utilisateur","attr":{"placeholder":"Nom d’utilisateur","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+                </div>
+                   
+                <div>
+                    {{ form_row(form.nom,{"label":"Nom","attr":{"placeholder":"Nom","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+                </div>
+                
+                <div>
+                    {{ form_row(form.email,{"label":"Adresse mail","attr":{"placeholder":"Adresse mail/login","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+                </div>
+                
+                <div>
+                    {{ form_row(form.password,{"type":"password","label":"Mot de passe","attr":{"placeholder":"Mot de passe","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+                </div>
+                
+                <div>
+                    {{ form_row(form.confirm_password,{"type":"password","label":"Confirmation du mot de passe","attr":{"placeholder":"Confirmation du mot de passe","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+                </div>
+
+                <div class="mt-5 flex justify-center">
+                    <button type="submit" class="btn btn-success" href="{{ path('app_login') }}">Inscription</button>
+                    {{ form_end(form)}}  
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+
+    {#
+      <h1>Formulaire d'inscription</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.username,{"label":"Prénom ","attr":{"placeholder":"Prénom","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+        {{ form_row(form.nom,{"label":"Nom","attr":{"placeholder":"Nom","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+        {{ form_row(form.email,{"label":"Adresse mail","attr":{"placeholder":"Adresse mail/login","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+        {{ form_row(form.password,{"type":"password","label":"Mot de passe","attr":{"placeholder":"Mot de passe","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+        {{ form_row(form.confirm_password,{"type":"password","label":"Confirmation du mot de passe","attr":{"placeholder":"Confirmation du mot de passe","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
+        <button type="submit" class="btn btn-success" href="{{ path('app_login') }}">Inscription</button>
+    {{ form_end(form)}}  #}
+    
 {% endblock %}
