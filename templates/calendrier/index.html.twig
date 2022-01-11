@@ -48,13 +48,15 @@
                     "title":e.event.title,
                     "description":e.event.extendedProps.description,
                     "start":e.event.start,
-                    "end":e.event.end,
                     "backgroundColor":e.event.backgroundColor,
                     "borderColor":e.event.borderColor,
                     "textColor":e.event.textColor,
                     "allDay":e.event.allDay,
                 }
-                {console.log(e.event.end)}
+                let xhr = new XMLHttpRequest
+
+                xhr.open("POST", url)
+                xhr.send(JSON.stringify(donnees))
             })
 
             calendar.render()
