@@ -19,9 +19,6 @@ class Calendar
     #[ORM\Column(type: 'datetime')]
     private $start;
 
-    #[ORM\Column(type: 'datetime')]
-    private $end;
-
     #[ORM\Column(type: 'text')]
     private $description;
 
@@ -62,18 +59,6 @@ class Calendar
     public function setStart(\DateTimeInterface $start): self
     {
         $this->start = $start;
-
-        return $this;
-    }
-
-    public function getEnd(): ?\DateTimeInterface
-    {
-        return $this->end;
-    }
-
-    public function setEnd(\DateTimeInterface $end): self
-    {
-        $this->end = $end;
 
         return $this;
     }

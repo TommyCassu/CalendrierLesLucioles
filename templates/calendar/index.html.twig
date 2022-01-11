@@ -11,7 +11,6 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Start</th>
-                <th>End</th>
                 <th>Description</th>
                 <th>All_day</th>
                 <th>Background_color</th>
@@ -26,7 +25,6 @@
                 <td>{{ calendar.id }}</td>
                 <td>{{ calendar.title }}</td>
                 <td>{{ calendar.start ? calendar.start|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ calendar.end ? calendar.end|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ calendar.description }}</td>
                 <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
                 <td>{{ calendar.backgroundColor }}</td>
@@ -39,7 +37,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="10">no records found</td>
+                <td colspan="9">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

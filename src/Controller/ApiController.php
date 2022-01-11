@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendar;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,20 +19,15 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/{id}/edit', name: 'api_event_edit', methods:'{"PUT"}')]
-    public function majEvent(?Calendar $calendar, Request $request): Response
+    #[Route('/api/{id}/edit', name: 'api_event_edit', methods:['GET', 'POST'])]
+    public function majEvent(?Calendar $calendar, Request $request)
     {
         // on récupère les données
-        $donnees = json_encode($request->getContent());
+        //$donnees = json_encode($request->getContent());
+        $donnees = json_decode($request->getContent(), true , 512 , 0);
 
         if(
-            isset($donnees->title) && !empty($donnees->title) &&
-            isset($donnees->start) && !empty($donnees->start) &&
-            isset($donnees->end) && !empty($donnees->end) &&
-            isset($donnees->description) && !empty($donnees->description) &&
-            isset($donnees->backgroundColor) && !empty($donnees->backgroundColor) &&
-            isset($donnees->borderColor) && !empty($donnees->borderColor) &&
-            isset($donnees->textColor) && !empty($donnees->textColor)
+            1+1==2
             ){
                 //les données sont complètes
                 //On initialise un code
@@ -45,21 +43,27 @@ class ApiController extends AbstractController
                 }
 
                 //On hydrate l'objet avec les données
-                $calendar->setTitle($donnees->title);
-                $calendar->setDescription($donnees->description);
-                $calendar->setStart($donnees->start);
-                $calendar->setEnd($donnees->end);
-                $calendar->setAllDay($donnees->allDay);
-                $calendar->setBackgroundColor($donnees->backgroundColor);
-                $calendar->setBorderColor($donnees->borderColor);
-                $calendar->setTextColor($donnees->textColor);
+                $datestart = date_create_from_format("yyyy-MM-dd'T'HH:mm:ss.Z", $donnees["start"],);
+                //$date = DateTime::createFromFormat("yyyy-MM-dd'T'HH:mm:ss.Z", $donnees["start"]);
+                //$date = new DateTime($donnees["start"]);
+                //date_format($date, 'Y-m-d H:i:s');
+
+                dd($datestart);
+                $calendar->setTitle($donnees["title"]);
+                
+                $calendar->setDescription($donnees["description"]);
+                $calendar->setStart($donnees["start"]);
+                $calendar->setAllDay($donnees["allDay"]);
+                $calendar->setBackgroundColor($donnees["backgroundColor"]);
+                $calendar->setBorderColor($donnees["borderColor"]);
+                $calendar->setTextColor($donnees["textColor"]);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($calendar);
                 $em->flush();
 
                 // On retourne le code
-                return new response('Ok',$code);
+                return new Response('Ok',$code);
             }else{
                 //les données sont incomplètes
                 return new Response('Données incomplètes', 404);
