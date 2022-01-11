@@ -5942,9 +5942,11 @@
         <argument key="loader" type="service_closure" id=".errored..service_locator.KfbR3DY.Symfony\Component\Config\Loader\LoaderInterface"/>
       </argument>
     </service>
-    <service id=".service_locator.T3JsMs3" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.K6kCk2c" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
-      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="em" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
     </service>
     <service id=".service_locator.jPdW3fN" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -5977,9 +5979,10 @@
         <argument key="calendar" type="service_closure" id="App\Repository\CalendarRepository"/>
       </argument>
     </service>
-    <service id=".service_locator.5H8hmAH" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.kQtmLP8" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Controller\ApiController::majEvent" type="service_closure" id=".service_locator.K6kCk2c"/>
         <argument key="App\Controller\CalendarController::delete" type="service_closure" id=".service_locator..szOsaH"/>
         <argument key="App\Controller\CalendarController::edit" type="service_closure" id=".service_locator..szOsaH"/>
         <argument key="App\Controller\CalendarController::index" type="service_closure" id=".service_locator.jPdW3fN"/>
@@ -5992,6 +5995,7 @@
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.KfbR3DY"/>
         <argument key="kernel::terminate" type="service_closure" id=".service_locator.KfwZsne"/>
+        <argument key="App\Controller\ApiController:majEvent" type="service_closure" id=".service_locator.K6kCk2c"/>
         <argument key="App\Controller\CalendarController:delete" type="service_closure" id=".service_locator..szOsaH"/>
         <argument key="App\Controller\CalendarController:edit" type="service_closure" id=".service_locator..szOsaH"/>
         <argument key="App\Controller\CalendarController:index" type="service_closure" id=".service_locator.jPdW3fN"/>
@@ -6541,12 +6545,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-      <argument type="service" id=".service_locator.5H8hmAH"/>
+      <argument type="service" id=".service_locator.kQtmLP8"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
-      <argument type="service" id=".service_locator.5H8hmAH"/>
+      <argument type="service" id=".service_locator.kQtmLP8"/>
     </service>
     <service id=".debug.http_client.inner" class="Symfony\Contracts\HttpClient\HttpClientInterface">
       <argument type="collection"/>
@@ -7378,7 +7382,7 @@
     <service id="Symfony\Component\Security\Core\User\UserCheckerInterface" alias="security.user_checker"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.gSv9zYw" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.5H8hmAH"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.kQtmLP8"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
     <service id="Psr\Log\LoggerInterface $consoleLogger" alias="monolog.logger.console"/>
@@ -7396,7 +7400,7 @@
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id=".service_locator.pqTZmjb" alias=".service_locator.2OT7QLm"/>
     <service id=".service_locator.0GV1BZZ" alias=".service_locator.gSv9zYw"/>
-    <service id=".service_locator.N7.ww5R" alias=".service_locator.5H8hmAH"/>
+    <service id=".service_locator.LEWGh3y" alias=".service_locator.kQtmLP8"/>
     <service id=".service_locator.wKF4yn1" alias=".service_locator.19_mNxd"/>
     <service id=".service_locator.Za9MpXe" alias=".service_locator.y4dplYt"/>
     <service id=".service_locator.qBCHs1a" alias=".service_locator.QXcJQkF"/>
@@ -7425,6 +7429,7 @@
     <service id="doctrine.orm.default_metadata_driver" alias=".doctrine.orm.default_metadata_driver"/>
     <service id=".service_locator._5g_Wvc" alias=".service_locator.KfwZsne"/>
     <service id=".service_locator.JBAFp66" alias=".service_locator.KfbR3DY"/>
+    <service id=".service_locator.wLh_ItZ" alias=".service_locator.K6kCk2c"/>
     <service id=".service_locator.Qdv5a45" alias=".service_locator.jPdW3fN"/>
     <service id=".service_locator.Er0_7SX" alias=".service_locator.l2QwsaZ"/>
     <service id=".service_locator.bwwTMPZ" alias=".service_locator.kh.3Agn"/>
