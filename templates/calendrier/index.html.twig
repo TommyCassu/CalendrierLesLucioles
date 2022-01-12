@@ -23,23 +23,28 @@
 {% block javascripts %}
 {# Script au chargement de la page #}
     <script>
+    if(){
         window.onload = ()=>{
             // parametrage du calendrier
             let calendarElt = document.querySelector("#calendrier")
 
-            let calendar = new FullCalendar.Calendar(calendarElt, {
-                inialView: 'dayGridMonth',
-                locale: 'fr',
-                timeZone : 'Europe/Paris',
-                headerToolBar: {
-                    start: 'prev, next today',
-                    center: 'title',
-                    end: 'dayGridMonth'
-                },
-                events: {{ data|raw }},
-                editable: true,
-                eventResizableFromStart: true
-            })
+            
+                let calendar = new FullCalendar.Calendar(calendarElt, {
+                    inialView: 'dayGridMonth',
+                    locale: 'fr',
+                    timeZone : 'Europe/Paris',
+                    headerToolBar: {
+                        start: 'prev, next today',
+                        center: 'title',
+                        end: 'dayGridMonth'
+                    },
+                    events: {{ data|raw }},
+                    editable: true,
+                    eventResizableFromStart: true
+                    
+                    
+                })
+            
 
             calendar.on('eventChange', (e) => {
                 let url = `/api/${e.event.id}/edit`
@@ -60,6 +65,51 @@
 
             calendar.render()
         }
+    }
+
+    if(1+1==32){
+        window.onload = ()=>{
+            // parametrage du calendrier
+            let calendarElt = document.querySelector("#calendrier")
+
+            
+                let calendar = new FullCalendar.Calendar(calendarElt, {
+                    inialView: 'dayGridMonth',
+                    locale: 'fr',
+                    timeZone : 'Europe/Paris',
+                    headerToolBar: {
+                        start: 'prev, next today',
+                        center: 'title',
+                        end: 'dayGridMonth'
+                    },
+                    events: {{ data|raw }},
+                    editable: false,
+                    eventResizableFromStart: false
+                    
+                    
+                })
+            
+
+            calendar.on('eventChange', (e) => {
+                let url = `/api/${e.event.id}/edit`
+                let donnees = {
+                    "title":e.event.title,
+                    "description":e.event.extendedProps.description,
+                    "start":e.event.start,
+                    "backgroundColor":e.event.backgroundColor,
+                    "borderColor":e.event.borderColor,
+                    "textColor":e.event.textColor,
+                    "allDay":e.event.allDay,
+                }
+                let xhr = new XMLHttpRequest
+
+                xhr.open("POST", url)
+                xhr.send(JSON.stringify(donnees))
+            })
+
+            calendar.render()
+        }
+    }    
     </script>
 
 {% endblock %}
