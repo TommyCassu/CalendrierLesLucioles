@@ -55,3 +55,6 @@
 ### Symfony Patch ###
 /web/css/
 /web/js/
+
+##  Migration ##
+migrations/*

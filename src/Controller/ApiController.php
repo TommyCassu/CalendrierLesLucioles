@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Calendar;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,11 +21,12 @@ class ApiController extends AbstractController
     }
 
     #[Route('/api/{id}/edit', name: 'api_event_edit', methods: ['GET', 'POST'])]
-    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
+    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em,User $user)
     {
         // on récupère les données
         $donnees = json_decode($request->getContent(), true, 512, 0);
 
+        
         if (
             1 + 1 == 2
         ) {
