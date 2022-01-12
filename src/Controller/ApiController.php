@@ -19,14 +19,13 @@ class ApiController extends AbstractController
             'controller_name' => 'ApiController',
         ]);
     }
-
-    #[Route('/api/{id}/edit', name: 'api_event_edit', methods: ['GET', 'POST'])]
-    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em,User $user)
+    
+    #[Route('/api/create', name: 'api_event_create', methods: ['POST'])]
+    public function createEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
     {
         // on récupère les données
         $donnees = json_decode($request->getContent(), true, 512, 0);
 
-        
         if (
             1 + 1 == 2
         ) {
@@ -55,6 +54,92 @@ class ApiController extends AbstractController
             $calendar->setTextColor($donnees["textColor"]);
 
             $em->persist($calendar);
+            $em->flush();
+
+            // On retourne le code
+            return new Response('Ok', $code);
+        } else {
+            //les données sont incomplètes
+            return new Response('Données incomplètes', 404);
+        }
+
+        return $this->render('api/index.html.twig', [
+            'controller_name' => 'ApiController',
+        ]);
+    }
+
+    #[Route('/api/{id}/edit', name: 'api_event_edit', methods: ['GET', 'POST'])]
+    public function majEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
+    {
+        // on récupère les données
+        $donnees = json_decode($request->getContent(), true, 512, 0);
+
+        if (
+            1 + 1 == 2
+        ) {
+            //les données sont complètes
+            //On initialise un code
+            $code = 200;
+
+            //On vérifie si l'id existe
+            if (!$calendar) {
+                // On instancie un rendez vous
+                $calendar = new Calendar;
+
+                //On change le code
+                $code = 201;
+            }
+
+            //On hydrate l'objet avec les données
+            $dateStart = new \DateTime($donnees["start"]);
+
+            $calendar->setTitle($donnees["title"]);
+            $calendar->setDescription($donnees["description"]);
+            $calendar->setStart($dateStart);
+            $calendar->setAllDay($donnees["allDay"]);
+            $calendar->setBackgroundColor($donnees["backgroundColor"]);
+            $calendar->setBorderColor($donnees["borderColor"]);
+            $calendar->setTextColor($donnees["textColor"]);
+
+            $em->persist($calendar);
+            $em->flush();
+
+            // On retourne le code
+            return new Response('Ok', $code);
+        } else {
+            //les données sont incomplètes
+            return new Response('Données incomplètes', 404);
+        }
+
+        return $this->render('api/index.html.twig', [
+            'controller_name' => 'ApiController',
+        ]);
+    }
+
+    #[Route('/api/{id}/delete', name: 'api_event_delete', methods: ['POST'])]
+    public function deleteEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
+    {
+        // on récupère les données
+        $donnees = json_decode($request->getContent(), true, 512, 0);
+        $id = $calendar->getId();
+        
+        if (
+            1 + 1 == 2
+        ) {
+            //les données sont complètes
+            //On initialise un code
+            $code = 200;
+
+            //On vérifie si l'id existe
+            if (!$calendar) {
+                //On change le code
+                $code = 404;
+                return new Response('Event inexistant', 404);
+            }
+            $repository = $em->getRepository(Calendar::class);
+            $event = $repository->find($id); 
+
+            $em->remove($event);
             $em->flush();
 
             // On retourne le code
