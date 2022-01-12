@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -32,9 +34,10 @@ class UserCrudController extends AbstractCrudController
             // ->add(Crud::PAGE_INDEX, Action::EDIT)
             ;
     }
-    public function redirection(){
+    public function redirection(EntityManagerInterface $entityManager,AdminContext $context):Response{
+         $user = $context->getEntity()->getInstance();
         //redirige vers le main
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('user_show',["id" =>$user->getId()]);
     }
     /*
     public function configureFields(string $pageName): iterable
