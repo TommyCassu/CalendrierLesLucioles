@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.css" integrity="sha256-RoGeDStTbXClGRj4hllIdGBYrCgEmO7H8SmutsYdDLU=" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
         <style>
           /* Shadow des interface du site */
           .shadoww{
@@ -61,7 +62,6 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 
   var containerEl = document.getElementById('external-events');
   var calendarEl = document.getElementById('calendar');
-  var checkbox = document.getElementById('drop-remove');
 
   // initialize the external events
   // -----------------------------------------------------------------
@@ -109,6 +109,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                 xhr.open("POST", url)
                 xhr.send(JSON.stringify(donnees))
             })
+
     calendar.on('drop', (e) => {
         let url = `/api/create`
         let rgbCodeBG = window.getComputedStyle(e.draggedEl ,null).getPropertyValue('background-color')
@@ -117,7 +118,6 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         rgbArray = rgbArray.replace(")", "")
         rgbArray = rgbArray.split(",")
         hexCodeBG = rgbToHex(parseInt(rgbArray[0]), parseInt(rgbArray[1]), parseInt(rgbArray[2]))
-        console.log(hexCodeBG)
 
         let donnees = {
             "title":e.draggedEl.innerText,
@@ -133,6 +133,26 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         xhr.open("POST", url)
         xhr.send(JSON.stringify(donnees))
         
+    })
+
+    calendar.on('eventDragStop', (e) => {    
+        let trashEl = document.getElementById('liste');
+
+        let x1 = trashEl.offsetLeft;
+        let x2 = trashEl.offsetLeft + trashEl.offsetWidth;
+        let y1 = trashEl.offsetTop;
+        let y2 = trashEl.offsetTop + trashEl.offsetHeight;
+
+        if (e.jsEvent.pageX >= x1 && e.jsEvent.pageX <= x2 &&
+            e.jsEvent.pageY >= y1 && e.jsEvent.pageY <= y2) 
+            {
+                let xhr = new XMLHttpRequest
+                let url = `/api/${e.event.id}/delete`
+                let event = calendar.getEventById(e.event.id)
+                xhr.open("POST", url)
+                xhr.send()
+                event.remove()
+        }
     })
 
 
