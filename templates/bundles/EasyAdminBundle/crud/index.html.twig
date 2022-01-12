@@ -3,6 +3,10 @@
 {# @var paginator \EasyCorp\Bundle\EasyAdminBundle\Orm\EntityPaginator #}
 {% extends ea.templatePath('layout') %}
 {% trans_default_domain ea.i18n.translationDomain %}
+{% block stylesheets %}
+            <script src="https://cdn.tailwindcss.com"></script>
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
 
 {% block body_id entities|length > 0 ? 'ea-index-' ~ entities|first.name : '' %}
 {% block body_class 'ea-index' ~ (entities|length > 0 ? ' ea-index-' ~ entities|first.name : '') %}
@@ -37,7 +41,7 @@
     {% endif %}
 
     {% block global_actions %}
-        <div class="global-actions">
+        <div class="global-actions ">
             {% for action in global_actions %}
                 {{ include(action.templatePath, { action: action }, with_context = false) }}
             {% endfor %}
@@ -98,6 +102,9 @@
                     <th {% if ea.crud.showEntityActionsAsDropdown %}width="10px"{% endif %} dir="{{ ea.i18n.textDirection }}">
                         <span class="sr-only">{{ 'action.entity_actions'|trans(ea.i18n.translationParameters, 'EasyAdminBundle') }}</span>
                     </th>
+                    <th {% if ea.crud.showEntityActionsAsDropdown %}width="10px"{% endif %} dir="{{ ea.i18n.textDirection }}">
+                        <span class="sr-only">{{ 'action.entity_actions'|trans(ea.i18n.translationParameters, 'EasyAdminBundle') }}</span>
+                    </th>
                 </tr>
             {% endblock table_head %}
             </thead>
@@ -109,7 +116,7 @@
                 {% if not entity.isAccessible %}
                     {% set some_results_are_hidden = true %}
                 {% else %}
-                    <tr data-id="{{ entity.primaryKeyValueAsString }}">
+                    <tr data-id="{{ entity.primaryKeyValueAsString }}" >
                         {% if has_batch_actions %}
                             <td class="batch-actions-selector">
                                 <div class="form-check">
@@ -125,11 +132,11 @@
                         {% endfor %}
 
                         {% block entity_actions %}
-                            <td class="actions {{ ea.crud.showEntityActionsAsDropdown ? 'actions-as-dropdown' }}">
-                                {% for action in entity.actions %}
-                                                    {{ include(action.templatePath, { action: action, entity: entity, isIncludedInDropdown: ea.crud.showEntityActionsAsDropdown }, with_context = false) }}
-                                                {% endfor %}
+                        {% for action in entity.actions %}
+                            <td class="">      
+                                {{ include(action.templatePath, { action: action, entity: entity, isIncludedInDropdown: ea.crud.showEntityActionsAsDropdown }, with_context = false) }}
                             </td>
+                        {% endfor %}
                         {% endblock entity_actions %}
                     </tr>
 
