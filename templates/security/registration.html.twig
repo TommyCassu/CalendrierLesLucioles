@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Formulaire d'inscription{% endblock %}
 {% block body %}
-    {{ form_start(form) }}
+     {{ form_start(form) }}
     <div class="absolute w-screen h-screen flex flex-col justify-center bg-yellow-300 ">
     
         <div class="px-10 w-auto p-4 shadow-2xl mx-auto rounded-2xl bg-white justify-center">
@@ -37,12 +37,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
  
 
 
-    {#
-      <h1>Formulaire d'inscription</h1>
+    
+      {# <h1>Formulaire d'inscription</h1>
     {{ form_start(form) }}
         {{ form_row(form.username,{"label":"Prénom ","attr":{"placeholder":"Prénom","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
         {{ form_row(form.nom,{"label":"Nom","attr":{"placeholder":"Nom","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
@@ -50,6 +50,6 @@
         {{ form_row(form.password,{"type":"password","label":"Mot de passe","attr":{"placeholder":"Mot de passe","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
         {{ form_row(form.confirm_password,{"type":"password","label":"Confirmation du mot de passe","attr":{"placeholder":"Confirmation du mot de passe","class":"form-control border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none"}}) }}
         <button type="submit" class="btn btn-success" href="{{ path('app_login') }}">Inscription</button>
-    {{ form_end(form)}}  #}
+    {{ form_end(form)}}   #}
     
 {% endblock %}
