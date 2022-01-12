@@ -4,39 +4,60 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+/**
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(
+ *     fields={"email", "username"},
+ *     message="Ce mail ou ce nom d'utilisateur existe déjà."
+ * )
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private $username;
+
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $nom;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $prenom;
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private $email;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $mail;
+    #[ORM\Column(type: 'json')]
+    private $roles = [];
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $tel;
+    #[ORM\Column(type: 'string')]
+    private $password;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $pass;
-
-    #[ORM\ManyToOne(targetEntity: Garde::class, inversedBy: 'utilisateur')]
-    private $garde;
+    public $confirm_password;
 
     public function getId(): ?int
     {
         return $this->id;
     }
+    //Accessuer et mutateur Prenom
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
 
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    //Accesseur et mutateur Nom
     public function getNom(): ?string
     {
         return $this->nom;
@@ -49,63 +70,68 @@ class User
         return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getEmail(): ?string
     {
-        return $this->prenom;
+        return $this->email;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setEmail(string $email): self
     {
-        $this->prenom = $prenom;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getMail(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->mail;
+        return (string) $this->email;
     }
 
-    public function setMail(string $mail): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->mail = $mail;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getTel(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->tel;
+        return $this->password;
     }
 
-    public function setTel(string $tel): self
+    public function setPassword(string $password): self
     {
-        $this->tel = $tel;
+        $this->password = $password;
 
         return $this;
     }
 
-    public function getPass(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        return $this->pass;
-    }
-
-    public function setPass(string $pass): self
-    {
-        $this->pass = $pass;
-
-        return $this;
-    }
-
-    public function getGarde(): ?Garde
-    {
-        return $this->garde;
-    }
-
-    public function setGarde(?Garde $garde): self
-    {
-        $this->garde = $garde;
-
-        return $this;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
