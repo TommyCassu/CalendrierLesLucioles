@@ -1,96 +1,99 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CalendrierController!{% endblock %}
+{% block title %}Callendrier{% endblock %}
 
 {% block stylesheets %}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.css" integrity="sha256-RoGeDStTbXClGRj4hllIdGBYrCgEmO7H8SmutsYdDLU=" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
         <style>
-        #calendrier{
-            width: 80%;
-            height: 800px;
-            margin: auto;
-        }
-        </style>
+          /* Shadow des interface du site */
+          .shadoww{
+        -webkit-box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2); 
+box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
+      }
+
+    </style>
 
 {% endblock %}
 
 {% block body %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.js" integrity="sha256-TdTSDSjuCyswg+ZC7ekTsOatmHRtTdToHybuyu2TZnY=" crossorigin="anonymous"></script>
-
-<div id="calendrier">
-</div>
+        <div class="flex h-screen w-screen ">
+            <div id="liste" class="flex bg-slate-400  w-1/6 justify-center ">
+                <div id='external-events'>
+                    <p>
+                        <strong>Glisser vos gardes</strong>
+                    </p>
+                    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+                        <div class='fc-event-main'>Tommy</div>
+                    </div>
+            </div>
+        </div>
+        <div id='calendar-container' class="h-screen w-screen">
+            <div id='calendar' class=" w-3/5 h-4/5 m-auto "></div>
+        </div>
+        
+                    
+                
 {% endblock %}
+
 {% block javascripts %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
+
 {# Script au chargement de la page #}
     <script>
-    if(1+1==2){
-        window.onload = ()=>{
-            // parametrage du calendrier
-            let calendarElt = document.querySelector("#calendrier")
-
-            
-                let calendar = new FullCalendar.Calendar(calendarElt, {
-                    inialView: 'dayGridMonth',
-                    locale: 'fr',
-                    timeZone : 'Europe/Paris',
-                    headerToolBar: {
-                        start: 'prev, next today',
-                        center: 'title',
-                        end: 'dayGridMonth'
-                    },
-                    events: {{ data|raw }},
-                    editable: true,
-                    eventResizableFromStart: true
-                    
-                    
-                })
-            
-
-            calendar.on('eventChange', (e) => {
-                let url = `/api/${e.event.id}/edit`
-                let donnees = {
-                    "title":e.event.title,
-                    "description":e.event.extendedProps.description,
-                    "start":e.event.start,
-                    "backgroundColor":e.event.backgroundColor,
-                    "borderColor":e.event.borderColor,
-                    "textColor":e.event.textColor,
-                    "allDay":e.event.allDay,
-                }
-                let xhr = new XMLHttpRequest
-
-                xhr.open("POST", url)
-                xhr.send(JSON.stringify(donnees))
-            })
-
-            calendar.render()
-        }
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+    
+    function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }
 
-    if(1+1==32){
-        window.onload = ()=>{
-            // parametrage du calendrier
-            let calendarElt = document.querySelector("#calendrier")
+    document.addEventListener('DOMContentLoaded', function() {
+  var Calendar = FullCalendar.Calendar;
+  var Draggable = FullCalendar.Draggable;
 
-            
-                let calendar = new FullCalendar.Calendar(calendarElt, {
-                    inialView: 'dayGridMonth',
-                    locale: 'fr',
-                    timeZone : 'Europe/Paris',
-                    headerToolBar: {
-                        start: 'prev, next today',
-                        center: 'title',
-                        end: 'dayGridMonth'
-                    },
-                    events: {{ data|raw }},
-                    editable: false,
-                    eventResizableFromStart: false
-                    
-                    
-                })
-            
+  var containerEl = document.getElementById('external-events');
+  var calendarEl = document.getElementById('calendar');
 
-            calendar.on('eventChange', (e) => {
+  // initialize the external events
+  // -----------------------------------------------------------------
+
+  new Draggable(containerEl, {
+    itemSelector: '.fc-event',
+    eventData: function(eventEl) {
+      return {
+        title: eventEl.innerText
+      };
+    }
+  });
+
+  // initialize the calendar
+  // -----------------------------------------------------------------
+
+  var calendar = new Calendar(calendarEl, {
+    inialView: 'dayGridMonth',
+    locale: 'fr',
+    timeZone : 'Europe/Paris',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    events: {{ data|raw }},
+    editable: true,
+    droppable: true 
+  });
+
+  //change les info dans la bdd quand on déplace un event
+  calendar.on('eventChange', (e) => {
                 let url = `/api/${e.event.id}/edit`
                 let donnees = {
                     "title":e.event.title,
@@ -107,9 +110,54 @@
                 xhr.send(JSON.stringify(donnees))
             })
 
-            calendar.render()
+    calendar.on('drop', (e) => {
+        let url = `/api/create`
+        let rgbCodeBG = window.getComputedStyle(e.draggedEl ,null).getPropertyValue('background-color')
+
+        var rgbArray = rgbCodeBG.replace("rgb(", "")
+        rgbArray = rgbArray.replace(")", "")
+        rgbArray = rgbArray.split(",")
+        hexCodeBG = rgbToHex(parseInt(rgbArray[0]), parseInt(rgbArray[1]), parseInt(rgbArray[2]))
+
+        let donnees = {
+            "title":e.draggedEl.innerText,
+            "description":"",
+            "start":e.date,
+            "backgroundColor":hexCodeBG,
+            "borderColor":hexCodeBG,
+            "textColor":'#ffffff',
+            "allDay":e.allDay,
         }
-    }    
+
+        let xhr = new XMLHttpRequest
+        xhr.open("POST", url)
+        xhr.send(JSON.stringify(donnees))
+        
+    })
+
+    calendar.on('eventDragStop', (e) => {    
+        let trashEl = document.getElementById('liste');
+
+        let x1 = trashEl.offsetLeft;
+        let x2 = trashEl.offsetLeft + trashEl.offsetWidth;
+        let y1 = trashEl.offsetTop;
+        let y2 = trashEl.offsetTop + trashEl.offsetHeight;
+
+        if (e.jsEvent.pageX >= x1 && e.jsEvent.pageX <= x2 &&
+            e.jsEvent.pageY >= y1 && e.jsEvent.pageY <= y2) 
+            {
+                let xhr = new XMLHttpRequest
+                let url = `/api/${e.event.id}/delete`
+                let event = calendar.getEventById(e.event.id)
+                xhr.open("POST", url)
+                xhr.send()
+                event.remove()
+        }
+    })
+
+
+  calendar.render();
+});
     </script>
 
 {% endblock %}
