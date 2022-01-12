@@ -58,3 +58,6 @@
 
 ##  Migration ##
 migrations/*
+
+## Env ##
+.env.local
