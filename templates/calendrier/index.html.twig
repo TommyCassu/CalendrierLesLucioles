@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Callendrier{% endblock %}
+{% block title %}Calendrier{% endblock %}
 
 {% block stylesheets %}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.css" integrity="sha256-RoGeDStTbXClGRj4hllIdGBYrCgEmO7H8SmutsYdDLU=" crossorigin="anonymous">
@@ -25,7 +25,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                         <strong>Glisser vos gardes</strong>
                     </p>
                     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-                        <div class='fc-event-main'>Tommy</div>
+                        <div class='fc-event-main'>{{username}}</div>
                     </div>
             </div>
         </div>
@@ -44,7 +44,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/fullcalendar.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/lang-all.js" integrity="sha512-6pFj+5IaeswUqAEsJEF0I6UtYpgN80bT5vLQ8mjOBtFWJwUteCMhy4CuteT6AXsVUOSx8U05dPWUbJwUbMaNgQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {# Script au chargement de la page #}
     <script>
     function componentToHex(c) {
@@ -79,13 +79,15 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
   // -----------------------------------------------------------------
 
   var calendar = new Calendar(calendarEl, {
+    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
     inialView: 'dayGridMonth',
+    locales: 'all',
     locale: 'fr',
     timeZone : 'Europe/Paris',
     headerToolbar: {
-      left: 'prev,next today',
+      left: 'prev',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      right: 'next'
     },
     events: {{ data|raw }},
     editable: true,
@@ -154,7 +156,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                 event.remove()
         }
     })
-
+    
 
   calendar.render();
 });

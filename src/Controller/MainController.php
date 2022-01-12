@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+
 use App\Repository\CalendarRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MainController extends AbstractController
 {
@@ -14,8 +16,15 @@ class MainController extends AbstractController
 
     #[Route('/main', name: 'main')]
 
-    public function index(CalendarRepository $calendar)
+    public function index(CalendarRepository $calendar, UserInterface $user)
     {
+        
+        
+        if($user!= null){
+            $username = $this->getUser()->getUsername();
+        }
+
+
         $events = $calendar->findAll();
         $rdvs = [];
         foreach($events as $event){
@@ -32,7 +41,7 @@ class MainController extends AbstractController
         }
         $data = json_encode($rdvs);
 
-        return $this->render('calendrier/index.html.twig', compact('data'));
+        return $this->render('calendrier/index.html.twig', compact('data','username'));
     }
 
 }
