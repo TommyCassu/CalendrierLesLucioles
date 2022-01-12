@@ -2,9 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
@@ -16,29 +22,32 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/edit', name: 'edit' )]
-    public function edit(Request $request, Producteur $producteur, UserPasswordEncoderInterface $userPass): Response
+    #[Route('/{id}', name: 'user_show', methods: ['GET'])]    
+    public function show(User $user): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
 
+    
+
+    #[Route('/{id}/edit', name: 'user_edit' )]
+    public function edit(Request $request, User $user, UserPasswordHasherInterface $userPass, EntityManagerInterface $entityManager): Response
+    {
         //Edition Nom
         if ($request->request->get('nom') != null) {
-            $producteur->setNom($request->request->get('nom'));
+            $user->setNom($request->request->get('nom'));
         }
 
         //Edition Prenom
         if ($request->request->get('username') != null) {
-            $producteur->setPrenom($request->request->get('username'));
-        }
-
-        //Edition Telephone
-        if ($request->request->get('tel') != null) {
-            $producteur->setTel($request->request->get('tel'));
+            $user->setUsername($request->request->get('username'));
         }
 
         //Edition Email
         if ($request->request->get('mail') != null) {
-            $producteur->setMail($request->request->get('mail'));
+            $user->setEmail($request->request->get('mail'));
         }
 
         //Verification mot de passe
@@ -46,12 +55,12 @@ class UserController extends AbstractController
             $oldPassword = $request->request->get('passAnc');
             $newPass = $request->request->get('pass');
             $newPassConf = $request->request->get('passConf');
-            if ($userPass->isPasswordValid($producteur,$oldPassword)){
+            if ($userPass->isPasswordValid($user,$oldPassword)){
                 if ($newPass != null){
                     if ($newPass == $newPassConf){
                         if ($newPass != $oldPassword ){
-                            $passHash = ($userPass->encodePassword($producteur, $newPass)); 
-                            $producteur->setMdp($passHash);
+                            $passHash = ($userPass->hashPassword($user, $newPass)); 
+                            $user->setPassword($passHash);
                         }else{
                             $this->addFlash(
                                 'alert',
@@ -72,4 +81,10 @@ class UserController extends AbstractController
                 }
             }
         }
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("main");
+}
 }
