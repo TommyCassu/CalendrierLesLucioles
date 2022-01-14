@@ -7,12 +7,37 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class UserCrudController extends AbstractCrudController
 {
+    //Configuration du CRUD Utilisateur
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            //Choix du titre affiché sur la page INDEX (principale)
+            ->setPageTitle('index','%entity_label_singular%')
+            //Titre de l'entity au singulier
+            ->setEntityLabelInSingular("Utilisateur")
+            //Titre de l'entity au pluriel
+            ->setEntityLabelInPlural("Utilisateurs")
+        ;
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            IdField::new('ID','id'),
+            TextField::new('Username','Prénom'),
+            TextField::new('nom','Nom'),
+            TextField::new('email','Email'),
+        ];
+    }
+    
     
     public static function getEntityFqcn(): string
     {
@@ -23,10 +48,11 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions):Actions
     {
         //Création d'une nouvelle action
-        $redirect = Action::new('redirect','Editer')
+        $redirect = Action::new('redirect','')
             //indique quelle méthode suivre 
             ->linkToCrudAction('redirection')
             ->addCssClass('btn btn-success')
+            ->setIcon('fas fa-pencil-alt')
             ;
 
         return $actions
@@ -35,7 +61,11 @@ class UserCrudController extends AbstractCrudController
                 ->remove(Crud::PAGE_INDEX,Action::EDIT)
                 //changement couleur bouton Delete
                 ->update(Crud::PAGE_INDEX,Action::DELETE, function(Action $action){
-                    return $action->setCssClass('btn btn-danger');
+                    return $action
+                    ->setLabel('')
+                    ->setCssClass('btn btn-danger')
+                    ->setIcon('fas fa-trash')
+                    ;
                 })
                 //changement couleur bouton New
                 ->update(Crud::PAGE_INDEX,Action::NEW, function(Action $action){
