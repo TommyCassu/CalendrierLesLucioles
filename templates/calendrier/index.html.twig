@@ -5,6 +5,7 @@
 {% block stylesheets %}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.css" integrity="sha256-RoGeDStTbXClGRj4hllIdGBYrCgEmO7H8SmutsYdDLU=" crossorigin="anonymous">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="stylesheet">
         <style>
           /* Shadow des interface du site */
           .shadoww{
@@ -18,20 +19,29 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 
 {% block body %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.js" integrity="sha256-TdTSDSjuCyswg+ZC7ekTsOatmHRtTdToHybuyu2TZnY=" crossorigin="anonymous"></script>
+      <div class="flex bg-slate-200 h-screen w-screen">
         <div class="flex h-screen w-screen ">
-            <div id="liste" class="flex bg-slate-400  w-1/6 justify-center ">
+            <div id="liste" class="flex bg-slate-300  w-1/6 justify-center rounded-r-2xl">
                 <div id='external-events'>
-                    <p>
-                        <strong>Glisser vos gardes</strong>
-                    </p>
-                    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-                        <div class='fc-event-main'>{{username}}</div>
+                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
+                    <div id={{user.id}} class=' fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-3/6'>
+                        <div  class='fc-event-main h-10 text-center content-center'>{{user.username}}</div>
                     </div>
+                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos prochaines gardes :</h1>
             </div>
         </div>
-        <div id='calendar-container' class="h-screen w-screen">
-            <div id='calendar' class=" w-3/5 h-4/5 m-auto "></div>
+        <div class="flex-col  z-10 w-full  ">
+          <div class="flex justify-center ">
+            <h1 class=" z-10 text-center text-lg font-['Open_Sans'] font-bold text-2xl mt-6 mb-6">Calendrier des gardes </h1>
+          </div>
+          <div id='calendar-container' class="flex m-auto h-5/6 w-8/12 bg-white  rounded-2xl">
+          
+              <div id='calendar' class=" w-11/12 h-5/6 m-auto   bg-white"></div>
+          </div>
         </div>
+        
+        
+      </div>
         
                     
                 
@@ -47,11 +57,13 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/lang-all.js" integrity="sha512-6pFj+5IaeswUqAEsJEF0I6UtYpgN80bT5vLQ8mjOBtFWJwUteCMhy4CuteT6AXsVUOSx8U05dPWUbJwUbMaNgQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {# Script au chargement de la page #}
     <script>
+    // permet de transformer le nombre RGB en HexaDecimal
     function componentToHex(c) {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
     
+    // permet de prendre les nombre en hexiDecimal pour obtenir le code HEX
     function rgbToHex(r, g, b) {
         return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }
@@ -63,9 +75,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
   var containerEl = document.getElementById('external-events');
   var calendarEl = document.getElementById('calendar');
 
-  // initialize the external events
-  // -----------------------------------------------------------------
-
+  // On rend draggable l'username sur la gauche 
   new Draggable(containerEl, {
     itemSelector: '.fc-event',
     eventData: function(eventEl) {
@@ -75,12 +85,27 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
     }
   });
 
-  // initialize the calendar
-  // -----------------------------------------------------------------
 
+  //On stock data raw(controller) dans event
+  const events = {{data|raw}} 
+  // On stock l'userId
+  const userId = {{user.id}}
+  // On vérifie le rôle de l'utilisateur connecté et on lui permet de modifier les events qui lui appartiennent
+  let isAdmin
+  {% for role in user.roles %}
+    {% if role == "ROLE_ADMIN" %}
+      isAdmin = true
+    {% endif %}
+  {% endfor %}
+  events.forEach(function(event) {if (event.user_id == userId || isAdmin) {event.editable=true}})
+
+
+// Création de calendrier avec les différentes options que l'on choisis
   var calendar = new Calendar(calendarEl, {
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
     inialView: 'dayGridMonth',
+    selectable: true,
+    hiddenDays: [ 6, 0 ],
     locales: 'all',
     locale: 'fr',
     timeZone : 'Europe/Paris',
@@ -89,12 +114,11 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
       center: 'title',
       right: 'next'
     },
-    events: {{ data|raw }},
-    editable: true,
+    events: events,
     droppable: true 
   });
 
-  //change les info dans la bdd quand on déplace un event
+  //change les informations dans la bdd quand on déplace un event
   calendar.on('eventChange', (e) => {
                 let url = `/api/${e.event.id}/edit`
                 let donnees = {
@@ -112,10 +136,12 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                 xhr.send(JSON.stringify(donnees))
             })
 
+    // Drag and drop d'un event sur le calendrier permet alors de créer directement un event et de l'ajouter au calendrier
     calendar.on('drop', (e) => {
         let url = `/api/create`
         let rgbCodeBG = window.getComputedStyle(e.draggedEl ,null).getPropertyValue('background-color')
 
+        //Transformation de la couleur sous forme de RGB en code HEX 
         var rgbArray = rgbCodeBG.replace("rgb(", "")
         rgbArray = rgbArray.replace(")", "")
         rgbArray = rgbArray.split(",")
@@ -123,6 +149,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 
         let donnees = {
             "title":e.draggedEl.innerText,
+            "user_id":e.draggedEl.id,
             "description":"",
             "start":e.date,
             "backgroundColor":hexCodeBG,
@@ -130,13 +157,15 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
             "textColor":'#ffffff',
             "allDay":e.allDay,
         }
-
+        // Envoie sous forme de requête post les données
         let xhr = new XMLHttpRequest
         xhr.open("POST", url)
         xhr.send(JSON.stringify(donnees))
-        
+
+        location.reload();
     })
 
+    //Supression d'un évènement lorsque l'on de drag and drop depuis le calendrier jusqu'a la zone grise a gauche
     calendar.on('eventDragStop', (e) => {    
         let trashEl = document.getElementById('liste');
 

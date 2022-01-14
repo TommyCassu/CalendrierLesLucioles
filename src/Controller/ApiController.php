@@ -20,17 +20,17 @@ class ApiController extends AbstractController
         ]);
     }
     
+    // Création d'une garde ( event ) 
     #[Route('/api/create', name: 'api_event_create', methods: ['POST'])]
     public function createEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
     {
-        // on récupère les données
+        // On récupère le json et on le décode
         $donnees = json_decode($request->getContent(), true, 512, 0);
 
         if (
             1 + 1 == 2
         ) {
-            //les données sont complètes
-            //On initialise un code
+            //Si les données sont complètes On initialise un code
             $code = 200;
 
             //On vérifie si l'id existe
@@ -41,6 +41,8 @@ class ApiController extends AbstractController
                 //On change le code
                 $code = 201;
             }
+            $user = $em->getRepository(User::class)
+                        ->find($donnees["user_id"]);
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
@@ -52,6 +54,7 @@ class ApiController extends AbstractController
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
             $calendar->setTextColor($donnees["textColor"]);
+            $calendar->setUser($user);
 
             $em->persist($calendar);
             $em->flush();
@@ -100,7 +103,6 @@ class ApiController extends AbstractController
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
             $calendar->setTextColor($donnees["textColor"]);
-
             $em->persist($calendar);
             $em->flush();
 
