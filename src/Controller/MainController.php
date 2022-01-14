@@ -18,18 +18,12 @@ class MainController extends AbstractController
 
     public function index(CalendarRepository $calendar, UserInterface $user)
     {
-        
-        
-        if($user!= null){
-            $username = $this->getUser()->getUsername();
-        }
-
-
         $events = $calendar->findAll();
         $rdvs = [];
         foreach($events as $event){
             $rdvs[]= [
                 'id' => $event->getId(),
+                'user_id' => $event->getUser()->getId(),
                 'start' => $event->getStart()->format('Y-m-d H:i:s'),
                 'title' => $event->getTitle(),
                 'description' => $event->getDescription(),
@@ -40,8 +34,7 @@ class MainController extends AbstractController
             ];
         }
         $data = json_encode($rdvs);
-
-        return $this->render('calendrier/index.html.twig', compact('data','username'));
+        return $this->render('calendrier/index.html.twig', compact('data','user'));
     }
 
 }
