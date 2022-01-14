@@ -6,7 +6,7 @@
 
     <form method="POST" action="{{ path('user_edit',{'id':user.id}) }}">
     {# Met en colonne #}
-    <div class="absolute w-screen h-screen flex flex-col">
+    <div class="absolute w-screen h-screen flex flex-col justify-center bg-yellow-300">
             {# Formulaire de gestion de compte #}
             <div class="px-10 p-4 shadow-2xl mx-auto rounded-2xl bg-white">
                 <div class="">
@@ -23,11 +23,7 @@
                         </div>
                         {# Séparateur Milieu #}
                         <div class="mt-5 w-2/12 "></div>
-                        {# Zone de saisie Ancien mot de passe #}    
-                        <div class="mt-5 w-5/12 ">
-                            <label for="passAnc">Ancien mot de passe :</label>
-                            <input type="password" id="passAnc" name="passAnc" placeholder="Mot de passe actuel" class="border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none " >
-                        </div>
+                        
                     </div>
                     {# Ligne N°2 #}
                     <div class="flex justify-centrer mx-auto">

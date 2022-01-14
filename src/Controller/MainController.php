@@ -17,7 +17,7 @@ class MainController extends AbstractController
     #[Route('/main', name: 'main')]
 
     public function index(CalendarRepository $calendar, UserInterface $user)
-    {
+    {   
         
         
         if($user!= null){
