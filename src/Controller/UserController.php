@@ -37,7 +37,8 @@ class UserController extends AbstractController
     public function show(User $user, Request $request, UserRepository $userRepository): Response
     {
         $userLoggedId = $this->security->getUser()->getId();
-        if ($userLoggedId == $request->get('id')){
+        $userLoggedRoles = $this->security->getUser()->getRoles()[0];
+        if ($userLoggedId == $request->get('id') || $userLoggedRoles == "ROLE_ADMIN"){
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
