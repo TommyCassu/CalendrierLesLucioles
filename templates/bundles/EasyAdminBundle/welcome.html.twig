@@ -1,58 +1,59 @@
 {# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
 {% extends '@EasyAdmin/page/content.html.twig' %}
-
-{% block content_title 'Pour modif ça il faut aller dans templates/bundles/EasyAdminBundle/welcome.html.twig' %}
-
 {% block main %}
+
     <style>
         p { max-width: 600px; }
     </style>
+    {# Titre #}
+    <div class="text-center fs-1 fw-bold">
+    Bienvenue sur votre Panel Admin
+    </div>
+    <div class="container">
+        <div class="text-center mt-2 fs-5">Le Panel Admin est un outil d'administration qui vous permettra de gérer simplement et efficacement les comptes de chaque parent,
+        mais celui-ci vous permez aussi d'avoir un suivi en temps réel des gardes choisies.<br>
+        </br>Vous pouvez retrouver sous cette description un <a class="fw-bold">"tutoriel"</a> sur comment utilisé le panel</div>
+    </div>
+    {# Tutoriel #}
+    <div class="container">
+    <div class="fs-2 mt-5">Tableau de bord</div>
+    <p class="mt-2 fs-5 container-lg">Le <a class="fw-bold">tableau de bord</a> sera l'outil qui vous permettra de naviguer à travers les différentes interfaces d'administration.
+    Il sera toujours afficher en haut à droite de l'écran et il contiendra toujours les mêmes champs.</p>
+    <div>
+    <img class="rounded" src="/assets/Panel.png" alt="Screenshot du panel"style="float:left">
+    <p class="ml-2 fs-5 container-md">Pour naviguer entre chaque interface il vous suffit simplement de cliquer sur le champ qui vous intéresse.</p>
+    <div style="clear: left"></div>
+    </div>
 
-    <p>
-        <strong>You have successfully installed EasyAdmin 4 in your application!</strong>
-    </p>
+    <div class="fs-2 mt-5">Gestion des champs</div>
+    <p class="mt-2 fs-5 container-lg">Après avoir cliqué sur le champ qui vous interessé une nouvelle page s'ouvre.Vous y trouverez un <a class="fw-bold">tableau</a> contenant les
+    informations concernant le champ choisi et pour chacun il vous sera possible d'effectuer certaines actions </p>
+    <div>
+    <img class="rounded figure-img" src="/assets/Liste.png" alt="Screenshot d'une liste">
+    <p class="ml-2 fs-5 container-md figure-caption">Dans l'exemple ci-dessus on peut voir les informations concernant les utilisateur</p>
+    </div>
+    <div>
+    <img class="rounded figure-img" src="/assets/Recherche.png" alt="Screenshot d'une liste">
+    <p class="ml-2 fs-5 container-md">Si la navigation à travers le tableau est trop complexe dû à un grand nombre de saisie, vous pouvez utiliser la <a class="fw-bold">barre
+    de recherche</a> disponible en haut de l'écran.Vous pouvez y saisir par exemple un nom de famille dans le cas où vous cherchiez un parent</p>
+    </div>
 
-    <p>
-        You are seeing this example page because you haven't configured the start page
-        of your Dashboard. To do that, open the following file in your editor:
-    </p>
-
-    <pre>{{ dashboard_controller_filepath }}</pre>
-
-    <p>
-        Then, add the following method to it to customize the Dashboard start page:
-    </p>
-
-    <pre>
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-// ...
-
-class {{ dashboard_controller_class }} extends AbstractDashboardController
-{
-    /**
-     * @Route("/admin")
-     */
-    public function index(): Response
-    {
-        // redirect to some CRUD controller
-        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-
-        return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // you can also redirect to different pages depending on the current user
-        if ('jane' === $this->getUser()->getUsername()) {
-            return $this->redirect('...');
-        }
-
-        // you can also render some template to display a proper Dashboard
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        return $this->render('some/path/my-dashboard.html.twig');
-    }
-
-    // ...
-}
-    </pre>
+    <div class="fs-2 mt-5">Actions disponible</div>
+    <p class="mt-2 fs-5 container-lg">Lorsque vous etes sur la page de gestion d'un champs vous avez différentes actions possible qui vous permettront par exemple
+    de supprimer,de créer ou bien d'éditer une entité</p>
+    <div class="fs-3 mt-3">Supprimer<br>
+    <img class="rounded figure-img" src="/assets/Supprimer.png" alt="Screenshot d'une liste">
+    <p class="ml-2 fs-5 container-md figure-caption">Le bouton ci-dessus vous indique que vous pouvez <a class="fw-bold">supprimer</a> l'élement sur lequel il se trouve.</p>
+    </div>
+    <div class="fs-3 mt-3">Éditer<br>
+    <img class="rounded figure-img" src="/assets/Edit.png" alt="Screenshot d'une liste">
+    <p class="ml-2 fs-5 container-md figure-caption">Le bouton ci-dessus vous indique que vous pouvez <a class="fw-bold">éditer</a> l'élement sur lequel il se trouve.</p>
+    </div>
+    <div class="fs-3 mt-3">Créer<br>
+    <img class="rounded figure-img" src="/assets/Créer.png" alt="Screenshot d'une liste">
+    <p class="ml-2 fs-5 container-md figure-caption">Le bouton ci-dessus vous indique que vous pouvez <a class="fw-bold">créer</a> un élement du champ sur lequel il vous vous trouvez.Ce bouton ce
+    trouvera toujours en haut à droite de votre écran si cette action est disponible</p>
+    </div>
+    
+    </div>
 {% endblock %}

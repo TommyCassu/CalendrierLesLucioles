@@ -117,6 +117,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
     events: events,
     droppable: true 
   });
+  
 
   //change les informations dans la bdd quand on déplace un event
   calendar.on('eventChange', (e) => {
@@ -135,6 +136,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                 xhr.open("POST", url)
                 xhr.send(JSON.stringify(donnees))
             })
+            
 
     // Drag and drop d'un event sur le calendrier permet alors de créer directement un event et de l'ajouter au calendrier
     calendar.on('drop', (e) => {
