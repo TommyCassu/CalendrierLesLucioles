@@ -14,6 +14,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
       }
 
     </style>
+    
 
 {% endblock %}
 
@@ -24,8 +25,16 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
             <div id="liste" class="flex bg-slate-300  w-1/6 justify-center rounded-r-2xl">
                 <div id='external-events'>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div id={{user.id}} class=' fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-3/6'>
-                        <div  class='fc-event-main h-10 text-center content-center'>{{user.username}}</div>
+                    <div id={{data.user.id}} class=' fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-3/6'>
+                        <div  class='fc-event-main h-10 text-center content-center'>{{data.user.username}}</div>
+                    </div>
+                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
+                    <div>
+                      {% for garde in lGarde %}
+                        <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
+                          <div  class='h-10 text-center content-center text-white'>{{garde.dDebut|date('d-m-Y')}}</div>
+                        </div>
+                      {% endfor %}
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos prochaines gardes :</h1>
             </div>
@@ -85,19 +94,21 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
     }
   });
 
+  //Onstock la liste des garde de l'utilisateur 
+  
 
-  //On stock data raw(controller) dans event
-  const events = {{data|raw}} 
+  //On stock data raw(controller) dans event 
+  const events = {{data.data|raw}} 
   // On stock l'userId
-  const userId = {{user.id}}
+  const userId = {{data.user.id}}
   // On vérifie le rôle de l'utilisateur connecté et on lui permet de modifier les events qui lui appartiennent
   let isAdmin
-  {% for role in user.roles %}
+  {% for role in data.user.roles %}
     {% if role == "ROLE_ADMIN" %}
       isAdmin = true
     {% endif %}
   {% endfor %}
-  events.forEach(function(event) {if (event.user_id == userId || isAdmin) {event.editable=true}})
+  events.forEach(function(event) {if (event.user_id == userId || isAdmin) {event.editable=true, event.overlap=false}})
 
 
 // Création de calendrier avec les différentes options que l'on choisis
@@ -115,7 +126,35 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
       right: 'next'
     },
     events: events,
-    droppable: true 
+    droppable: true,
+    {% for role in data.user.roles %}
+    {% if role == "ROLE_ADMIN" %}  
+    select: function(info) {
+        let url = `/api/create`
+        var titleVacation = prompt('Entrez le nom des vacances:')
+        //alert('selected ' + info.startStr + ' to ' + info.endStr+ url);
+
+        let vacances = {
+              "title":titleVacation,
+              "user_id":userId,
+              "description":"",
+              "start":info.startStr,
+              "backgroundColor":'#28c321',
+              "borderColor":'#28c321',
+              "textColor":'#ffffff',
+              "allDay":1,
+              "end":info.endStr,
+          }
+          console.log(vacances)
+          let xhr = new XMLHttpRequest
+          xhr.open("POST", url)
+          xhr.send(JSON.stringify(vacances))
+
+          location.reload();
+        
+      }
+    {% endif %}
+  {% endfor %}
   });
 
   //change les informations dans la bdd quand on déplace un event
@@ -125,6 +164,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                     "title":e.event.title,
                     "description":e.event.extendedProps.description,
                     "start":e.event.start,
+                    "end":null,
                     "backgroundColor":e.event.backgroundColor,
                     "borderColor":e.event.borderColor,
                     "textColor":e.event.textColor,
@@ -156,6 +196,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
             "borderColor":hexCodeBG,
             "textColor":'#ffffff',
             "allDay":e.allDay,
+            "end":e.date,
         }
         // Envoie sous forme de requête post les données
         let xhr = new XMLHttpRequest
