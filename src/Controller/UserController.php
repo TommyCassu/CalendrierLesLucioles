@@ -11,9 +11,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Security;
 
 class UserController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+
+   
+
     #[Route('/user', name: 'user')]
     public function index(): Response
     {
@@ -23,11 +34,16 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'user_show', methods: ['GET'])]    
-    public function show(User $user): Response
+    public function show(User $user, Request $request, UserRepository $userRepository): Response
     {
+        $userLoggedId = $this->security->getUser()->getId();
+        if ($userLoggedId == $request->get('id')){
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
+        }else{
+            return $this->redirectToRoute("main");
+        }
     }
 
     
@@ -51,36 +67,26 @@ class UserController extends AbstractController
         }
 
         //Verification mot de passe
-        if ($request->request->get('passAnc') != null) {
-            $oldPassword = $request->request->get('passAnc');
             $newPass = $request->request->get('pass');
             $newPassConf = $request->request->get('passConf');
-            if ($userPass->isPasswordValid($user,$oldPassword)){
                 if ($newPass != null){
                     if ($newPass == $newPassConf){
-                        if ($newPass != $oldPassword ){
                             $passHash = ($userPass->hashPassword($user, $newPass)); 
                             $user->setPassword($passHash);
                         }else{
                             $this->addFlash(
                                 'alert',
-                                'Votre nouveau mot de passe ne peut pas être identique a votre mot de passe actuel'
+                                'Veuillez entrez deux mot de passe identique'
                             );
                         }
                     }else{
                         $this->addFlash(
                             'alert',
-                            'Veuillez entrez deux mot de passe identique'
+                            'Veuillez rentrer le nouveau mot de passe'
                         );
                     }
-                }else{
-                    $this->addFlash(
-                        'alert',
-                        'Veuillez rentrer le nouveau mot de passe'
-                    );
-                }
-            }
-        }
+                
+        
 
         $entityManager->persist($user);
         $entityManager->flush();
