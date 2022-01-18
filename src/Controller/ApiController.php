@@ -46,10 +46,13 @@ class ApiController extends AbstractController
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
+            $dateEnd = new \DateTime($donnees["end"]);
+
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
             $calendar->setStart($dateStart);
+            $calendar->setEnd($dateEnd);
             $calendar->setAllDay($donnees["allDay"]);
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
@@ -95,10 +98,12 @@ class ApiController extends AbstractController
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
+            $dateEnd = new \DateTime($donnees["end"]);
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
             $calendar->setStart($dateStart);
+            $calendar->setEnd($dateEnd);
             $calendar->setAllDay($donnees["allDay"]);
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
@@ -155,4 +160,9 @@ class ApiController extends AbstractController
             'controller_name' => 'ApiController',
         ]);
     }
+
+    #[Route('/api/create', name: 'api_event_create', methods: ['POST'])]
+    public function RecupGarde(?Calendar $calendar, Request $request, EntityManagerInterface $em)
+    {
+}
 }
