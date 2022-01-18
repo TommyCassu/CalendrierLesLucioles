@@ -36,6 +36,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                         </div>
                       {% endfor %}
                     </div>
+                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos prochaines gardes :</h1>
             </div>
         </div>
         <div class="flex-col  z-10 w-full  ">
@@ -197,7 +198,6 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
             "allDay":e.allDay,
             "end":e.date,
         }
-        console.log(e.date)
         // Envoie sous forme de requête post les données
         let xhr = new XMLHttpRequest
         xhr.open("POST", url)
