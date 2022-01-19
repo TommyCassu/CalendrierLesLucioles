@@ -18,9 +18,13 @@ class Famille
     #[ORM\OneToMany(mappedBy: 'famille', targetEntity: User::class)]
     private $User;
 
+    #[ORM\OneToMany(mappedBy: 'famille', targetEntity: Calendar::class)]
+    private $calendars;
+
     public function __construct()
     {
         $this->User = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,6 +56,36 @@ class Famille
             // set the owning side to null (unless already changed)
             if ($user->getFamille() === $this) {
                 $user->setFamille(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Calendar[]
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): self
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars[] = $calendar;
+            $calendar->setFamille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): self
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getFamille() === $this) {
+                $calendar->setFamille(null);
             }
         }
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Repository\CalendarRepository;
+use App\Repository\FamilleRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,11 +21,14 @@ class MainController extends AbstractController
     public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository)
     {
         $user = $this->getUser();
+        $famille = $this->getUser()->getFamille();
         $events = $calendar->findAll();
         if ($user != NULL) {
+            $familleId = $famille->getId();
             $userId = $user->getId();
+            
             //dd($user->getCalendars());
-                // Afficher le tableau des annonces
+                // Afficher la liste des gardes
             $ListeDesGardes = [];
             foreach ($user->getCalendars() as $calendar) {
 
@@ -47,7 +51,9 @@ class MainController extends AbstractController
                         'textColor' => $textColor,
                         'borderColor' => $borderColor
                     ];
+                    
             }
+            
         }
 
         
@@ -57,6 +63,7 @@ class MainController extends AbstractController
                 $rdvs[]= [
                     'id' => $event->getId(),
                     'user_id' => $event->getUser()->getId(),
+                    'famille_id' => $event->getFamille()->getId(),
                     'start' => $event->getStart()->format('Y-m-d H:i:s'),
                     'title' => $event->getTitle(),
                     'description' => $event->getDescription(),
@@ -71,6 +78,7 @@ class MainController extends AbstractController
                 $rdvs[]= [
                     'id' => $event->getId(),
                     'user_id' => $event->getUser()->getId(),
+                    'famille_id' => $event->getFamille()->getId(),
                     'start' => $event->getStart()->format('Y-m-d H:i:s'),
                     'title' => $event->getTitle(),
                     'description' => $event->getDescription(),
@@ -82,7 +90,12 @@ class MainController extends AbstractController
             }
         }
         $data = json_encode($rdvs);
+        if (isset($listeDesGardes)){
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes]);
+            
+        }else{
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user')]);
+        }
         
-        return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes]);
     }
 }
