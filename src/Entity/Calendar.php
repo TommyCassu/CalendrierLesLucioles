@@ -40,6 +40,9 @@ class Calendar
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $end;
 
+    #[ORM\ManyToOne(targetEntity: Famille::class, inversedBy: 'calendars')]
+    private $famille;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +152,18 @@ class Calendar
     public function setEnd(?\DateTimeInterface $end): self
     {
         $this->end = $end;
+
+        return $this;
+    }
+
+    public function getFamille(): ?Famille
+    {
+        return $this->famille;
+    }
+
+    public function setFamille(?Famille $famille): self
+    {
+        $this->famille = $famille;
 
         return $this;
     }

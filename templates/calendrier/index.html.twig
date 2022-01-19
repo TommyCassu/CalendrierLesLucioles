@@ -30,13 +30,19 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     <div>
-                      {% for garde in lGarde %}
-                        <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
-                          <div  class='h-10 text-center content-center text-white'>{{garde.dDebut|date('d-m-Y')}}</div>
-                        </div>
-                      {% endfor %}
+                      {% if lGarde is defined %}
+                        {% for garde in lGarde %}
+                          <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
+                            <div  class='h-10 text-center content-center text-white'>{{garde.dDebut|date('d-m-Y')}}</div>
+                          </div>
+                        {% endfor %}
+                        {% else %}
+                          <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
+                            <div  class='h-10 text-center content-center text-white'>Pas de garde</div>
+                          </div>
+                      {% endif %}
                     </div>
-                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos prochaines gardes :</h1>
+                  <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos prochaines gardes :</h1>
             </div>
         </div>
         <div class="flex-col  z-10 w-full  ">
@@ -101,6 +107,8 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
   const events = {{data.data|raw}} 
   // On stock l'userId
   const userId = {{data.user.id}}
+  const familleId = {{data.user.famille.id}}
+  
   // On vérifie le rôle de l'utilisateur connecté et on lui permet de modifier les events qui lui appartiennent
   let isAdmin
   {% for role in data.user.roles %}
@@ -150,7 +158,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
           xhr.open("POST", url)
           xhr.send(JSON.stringify(vacances))
 
-          location.reload();
+          //location.reload();
         
       }
     {% endif %}
@@ -192,20 +200,21 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         let donnees = {
             "title":e.draggedEl.innerText,
             "user_id":e.draggedEl.id,
+            "famille_id":familleId,
             "description":"",
             "start":e.date,
             "backgroundColor":hexCodeBG,
             "borderColor":hexCodeBG,
             "textColor":'#ffffff',
             "allDay":e.allDay,
-            "end":e.date,
+            "end":null,
         }
         // Envoie sous forme de requête post les données
         let xhr = new XMLHttpRequest
         xhr.open("POST", url)
         xhr.send(JSON.stringify(donnees))
 
-        location.reload();
+        //location.reload();
     })
 
     //Supression d'un évènement lorsque l'on de drag and drop depuis le calendrier jusqu'a la zone grise a gauche
