@@ -161,8 +161,6 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/create', name: 'api_event_create', methods: ['POST'])]
-    public function RecupGarde(?Calendar $calendar, Request $request, EntityManagerInterface $em)
-    {
-}
+   
+
 }
