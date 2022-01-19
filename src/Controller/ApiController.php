@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Calendar;
 use App\Entity\User;
+use App\Entity\Famille;
+use App\Entity\Calendar;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,21 +44,22 @@ class ApiController extends AbstractController
             }
             $user = $em->getRepository(User::class)
                         ->find($donnees["user_id"]);
+            $famille = $em->getRepository(Famille::class)
+                        ->find($donnees["famille_id"]);
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
-            $dateEnd = new \DateTime($donnees["end"]);
-
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
             $calendar->setStart($dateStart);
-            $calendar->setEnd($dateEnd);
             $calendar->setAllDay($donnees["allDay"]);
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
             $calendar->setTextColor($donnees["textColor"]);
             $calendar->setUser($user);
+            $calendar->setFamille($famille);
+            
 
             $em->persist($calendar);
             $em->flush();
@@ -98,12 +100,10 @@ class ApiController extends AbstractController
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
-            $dateEnd = new \DateTime($donnees["end"]);
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
             $calendar->setStart($dateStart);
-            $calendar->setEnd($dateEnd);
             $calendar->setAllDay($donnees["allDay"]);
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
