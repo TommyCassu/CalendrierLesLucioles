@@ -19,7 +19,7 @@ class MainController extends AbstractController
     #[Route('/main', name: 'main')]
 
     public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository)
-    {
+    {   
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
         $events = $calendar->findAll();
