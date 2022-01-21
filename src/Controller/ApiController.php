@@ -47,11 +47,13 @@ class ApiController extends AbstractController
             }
             $user = $em->getRepository(User::class)
                         ->find($donnees["user_id"]);
+
             $famille = $em->getRepository(Famille::class)
                         ->find($donnees["famille_id"]);
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
+            $dateEnd = new \DateTime($donnees["end"]);
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
@@ -62,6 +64,7 @@ class ApiController extends AbstractController
             $calendar->setTextColor($donnees["textColor"]);
             $calendar->setUser($user);
             $calendar->setFamille($famille);
+            $calendar->setEnd($dateEnd);
             
 
             $em->persist($calendar);
