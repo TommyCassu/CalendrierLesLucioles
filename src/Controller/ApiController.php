@@ -16,6 +16,8 @@ class ApiController extends AbstractController
     #[Route('/api', name: 'api')]
     public function index(): Response
     {
+        
+
         return $this->render('api/index.html.twig', [
             'controller_name' => 'ApiController',
         ]);
@@ -25,6 +27,7 @@ class ApiController extends AbstractController
     #[Route('/api/create', name: 'api_event_create', methods: ['POST'])]
     public function createEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
     {
+       
         // On récupère le json et on le décode
         $donnees = json_decode($request->getContent(), true, 512, 0);
 
