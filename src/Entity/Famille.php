@@ -21,6 +21,9 @@ class Famille
     #[ORM\OneToMany(mappedBy: 'famille', targetEntity: Calendar::class)]
     private $calendars;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $nom;
+
     public function __construct()
     {
         $this->User = new ArrayCollection();
@@ -88,6 +91,18 @@ class Famille
                 $calendar->setFamille(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
 
         return $this;
     }

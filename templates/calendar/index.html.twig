@@ -3,37 +3,19 @@
 {% block title %}Calendar index{% endblock %}
 
 {% block body %}
-    <h1>Calendar index</h1>
 
-    <table class="table">
+    {# <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Start</th>
-                <th>Description</th>
-                <th>All_day</th>
-                <th>Background_color</th>
-                <th>Border_color</th>
-                <th>Text_color</th>
-                <th>actions</th>
+                <th>Famille</th>
+                <th>Nombre de garde</th>
             </tr>
         </thead>
         <tbody>
-        {% for calendar in calendars %}
+        {% for garde in nbgarde %}
             <tr>
-                <td>{{ calendar.id }}</td>
-                <td>{{ calendar.title }}</td>
-                <td>{{ calendar.start ? calendar.start|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ calendar.description }}</td>
-                <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
-                <td>{{ calendar.backgroundColor }}</td>
-                <td>{{ calendar.borderColor }}</td>
-                <td>{{ calendar.textColor }}</td>
-                <td>
-                    <a href="{{ path('calendar_show', {'id': calendar.id}) }}">show</a>
-                    <a href="{{ path('calendar_edit', {'id': calendar.id}) }}">edit</a>
-                </td>
+                <td>{{ garde.nom }}</td>
+                <td>{{ garde.nb }}</td>
             </tr>
         {% else %}
             <tr>
@@ -41,7 +23,64 @@
             </tr>
         {% endfor %}
         </tbody>
-    </table>
+    </table> #}
 
-    <a href="{{ path('calendar_new') }}">Create new</a>
+
+
+    <div class="absolute w-screen h-screen flex flex-col justify-center bg-yellow-300">
+            {# Formulaire de gestion de compte #}
+            <div class="px-10 p-4 shadow-2xl mx-auto rounded-2xl bg-white">
+                <div class="">
+                    {# Titre #}
+                    <div class="flex justify-center text-4xl font-extrabold">
+                        <h1>Tableau des gardes</h1>
+                    </div>
+                    {# Ligne N°1 #}
+                    <div class="flex justify-centrer mx-auto">
+                        {# Zone de saisie Nom #}
+                        <div class="mt-5 w-5/12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Famille</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for garde in nbgarde %}
+                                <tr>
+                                    <td>{{ garde.nom }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="9">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>
+                        {# Séparateur Milieu #}
+                        <div class="mt-5 w-2/12 "></div>
+                        <div class="mt-5 w-5/12 ">
+                            <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Gardes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for garde in nbgarde %}
+                                <tr>
+                                    <td>{{ garde.nb }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="9">no records found</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>  
+                    </div>
+                    </div>
+            </div>
 {% endblock %}

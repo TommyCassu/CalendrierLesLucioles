@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Calendar;
 use App\Form\CalendarType;
 use App\Repository\CalendarRepository;
+use App\Repository\FamilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +16,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class CalendarController extends AbstractController
 {
     #[Route('/', name: 'calendar_index', methods: ['GET'])]
-    public function index(CalendarRepository $calendarRepository): Response
+    public function index(CalendarRepository $calendarRepository,FamilleRepository $familleRepository): Response
     {
+        $familles = $familleRepository->findAll(); 
+        $nbgarde=[];
+        foreach($familles as $famille){
+            $nbgarde[]=[
+                'nb' => sizeof($famille->getCalendars()),
+                'nom' => $famille->getNom(),
+            ];
+        }
+
         return $this->render('calendar/index.html.twig', [
-            'calendars' => $calendarRepository->findAll(),
+            'nbgarde' => $nbgarde,
         ]);
     }
 
@@ -42,9 +52,11 @@ class CalendarController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'calendar_show', methods: ['GET'])]
+    #[Route('/', name: 'calendar_show', methods: ['GET'])]
     public function show(Calendar $calendar): Response
     {
+        
+
         return $this->render('calendar/show.html.twig', [
             'calendar' => $calendar,
         ]);
