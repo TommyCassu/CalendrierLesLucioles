@@ -52,6 +52,7 @@ class MainController extends AbstractController
                         'textColor' => $textColor,
                         'borderColor' => $borderColor
                     ];
+                    
             }
             
         }
@@ -99,7 +100,6 @@ class MainController extends AbstractController
         }else{
             return $this->render('calendrier/index.html.twig',['data' => compact('data','user')]);
         }
-
         
     }
 }

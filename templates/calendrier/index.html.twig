@@ -19,30 +19,45 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 {% endblock %}
 
 {% block body %}
+
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.js" integrity="sha256-TdTSDSjuCyswg+ZC7ekTsOatmHRtTdToHybuyu2TZnY=" crossorigin="anonymous"></script>
       <div class="flex bg-slate-200 h-screen w-screen">
         <div class="flex h-screen w-screen ">
             <div id="liste" class="flex bg-slate-300  w-1/6 justify-center rounded-r-2xl">
                 <div id='external-events'>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div id={{data.user.id}} class=' fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-3/6'>
+                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6'>
                         <div  class='fc-event-main h-10 text-center content-center'>{{data.user.username}}</div>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     <div>
                       {% if lGarde is defined %}
                         {% for garde in lGarde %}
-                          <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
-                            <div  class='h-10 text-center content-center text-white'>{{garde.dDebut|date('d-m-Y')}}</div>
-                          </div>
+
+                          {% if garde.dDebut|date("Y-m-d","Europe/Paris") > ("now"|date("Y-m-d","Europe/Paris")) %}
+                            <div class='w-full mt-3 flex inline space-x-2  '>
+                              <div class="mt-1"><svg class="svg-inline--fa fa-spinner fa-w-12 fa-spin fa-lg w-4"aria-hidden="true" focusable="false" data-prefix="fad" data-icon="spinner" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-spinner fa-w-16 fa-spin fa-lg"><g class="fa-group"><path fill="currentColor" d="M108.92 355.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 416a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm208-208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm-60.92 147.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm0-198.16a48 48 0 1 0-48-48 48 48 0 0 0 48 48z" class="fa-secondary"></path><path fill="currentColor" d="M108.92 60.92a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM48 208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 0a48 48 0 1 0 48 48 48 48 0 0 0-48-48z" class="fa-primary"></path></g></svg></div>
+                              <div  class='h-10 text-center content-center text-green-700 font-bold '>{{garde.dDebut|date("l d F",'Europe/Paris')}}</div>
+                            </div>
+                          {% else %}
+                            <div class='w-full mt-3 flex inline space-x-2'>
+                            
+                              <div class="" ><i class="fas fa-check-circle fa-1x "></i> </div>
+                              <div class='h-10 text-center content-center text-gray-700 font-bold'>{{garde.dDebut|date("l d F",'Europe/Paris')}}  </div>
+                            
+                            </div>
+                          {% endif %}
+                          
                         {% endfor %}
+                        
+                        
                         {% else %}
                           <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
                             <div  class='h-10 text-center content-center text-white'>Pas de garde</div>
                           </div>
                       {% endif %}
                     </div>
-                  <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos prochaines gardes :</h1>
+                    
             </div>
         </div>
         <div class="flex-col  z-10 w-full  ">
@@ -101,7 +116,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
   });
 
   //Onstock la liste des garde de l'utilisateur 
-  
+ 
 
   //On stock data raw(controller) dans event 
   const events = {{data.data|raw}} 
@@ -183,6 +198,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 
                 xhr.open("POST", url)
                 xhr.send(JSON.stringify(donnees))
+                location.reload();
             })
             
 
@@ -214,7 +230,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         xhr.open("POST", url)
         xhr.send(JSON.stringify(donnees))
 
-        //location.reload();
+        location.reload();
     })
 
     //Supression d'un évènement lorsque l'on de drag and drop depuis le calendrier jusqu'a la zone grise a gauche
@@ -235,7 +251,9 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                 xhr.open("POST", url)
                 xhr.send()
                 event.remove()
+                location.reload();
         }
+        
     })
     
 
