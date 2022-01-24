@@ -21,7 +21,9 @@ class MainController extends AbstractController
     {
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
-        $events = $calendar->findAll();   
+        $events = $calendar->findAll();
+        $userse = $userRepository->findAll();
+        
   
         if ($user != NULL) {
             $familleId = $famille->getId();
@@ -53,6 +55,9 @@ class MainController extends AbstractController
                     ];
                     
             }
+            
+            $userRole = $user->getRoles();
+            
             
         }
 
@@ -94,10 +99,10 @@ class MainController extends AbstractController
 
         $data = json_encode($rdvs);
         if (isset($listeDesGardes)){
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse]);
             
         }else{
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user')]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse]);
         }
         
     }
