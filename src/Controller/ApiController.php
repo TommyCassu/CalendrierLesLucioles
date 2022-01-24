@@ -30,10 +30,17 @@ class ApiController extends AbstractController
        
         // On récupère le json et on le décode
         $donnees = json_decode($request->getContent(), true, 512, 0);
+        $currentDateTime = date('c');
+        $dateCourante = new \DateTime($currentDateTime);
+        $dateStart = new \DateTime($donnees["start"]);
+        
+        
+        
 
         if (
-            1 + 1 == 2
+            $dateCourante < $dateStart
         ) {
+           
             //Si les données sont complètes On initialise un code
             $code = 200;
 
@@ -52,7 +59,7 @@ class ApiController extends AbstractController
                         ->find($donnees["famille_id"]);
 
             //On hydrate l'objet avec les données
-            $dateStart = new \DateTime($donnees["start"]);
+            
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
@@ -85,9 +92,12 @@ class ApiController extends AbstractController
     {
         // on récupère les données
         $donnees = json_decode($request->getContent(), true, 512, 0);
+        $currentDateTime = date('c');
+        $dateCourante = new \DateTime($currentDateTime);
+        $dateStart = new \DateTime($donnees["start"]);
 
         if (
-            1 + 1 == 2
+            $dateCourante < $dateStart
         ) {
             //les données sont complètes
             //On initialise un code
@@ -133,9 +143,13 @@ class ApiController extends AbstractController
         // on récupère les données
         $donnees = json_decode($request->getContent(), true, 512, 0);
         $id = $calendar->getId();
+
+        $currentDateTime = date('c');
+        $dateCourante = new \DateTime($currentDateTime);
+        $dateStart = new \DateTime($donnees["start"]);
         
         if (
-            1 + 1 == 2
+            $dateCourante < $dateStart
         ) {
             //les données sont complètes
             //On initialise un code
