@@ -21,7 +21,7 @@ class MainController extends AbstractController
     {
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
-        $events = $calendar->findAll();   
+        $events = $calendar->findAll(); 
   
         if ($user != NULL) {
             $familleId = $famille->getId();

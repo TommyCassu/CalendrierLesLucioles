@@ -48,6 +48,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: Famille::class, inversedBy: 'User')]
     private $famille;
 
+    #[ORM\Column(type: 'boolean')]
+    private $modifpass;
+
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
@@ -186,6 +189,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFamille(?Famille $famille): self
     {
         $this->famille = $famille;
+
+        return $this;
+    }
+
+    public function getModifpass(): ?bool
+    {
+        return $this->modifpass;
+    }
+
+    public function setModifpass(bool $modifpass): self
+    {
+        $this->modifpass = $modifpass;
 
         return $this;
     }

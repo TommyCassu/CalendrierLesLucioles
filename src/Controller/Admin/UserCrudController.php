@@ -52,8 +52,7 @@ class UserCrudController extends AbstractCrudController
             //indique quelle méthode suivre 
             ->linkToCrudAction('redirection')
             ->addCssClass('btn btn-success')
-            ->setIcon('fas fa-pencil-alt')
-            ;
+            ->setIcon('fas fa-pencil-alt');
 
         return $actions
                 //ajoute notre nouvelle action sur la page index (page principale)
@@ -80,7 +79,6 @@ class UserCrudController extends AbstractCrudController
         //redirige vers le main
         return $this->redirectToRoute('user_show',["id" =>$user->getId()]);
     }
-
     /*
     public function configureFields(string $pageName): iterable
     {
