@@ -33,7 +33,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                     <div>
                       {% if lGarde is defined %}
                         {% for garde in lGarde %}
-
+                        
                           {% if garde.dDebut|date("Y-m-d","Europe/Paris") > ("now"|date("Y-m-d","Europe/Paris")) %}
                             <div class='w-full mt-3 flex inline space-x-2  '>
                               <div class="mt-1"><svg class="svg-inline--fa fa-spinner fa-w-12 fa-spin fa-lg w-4"aria-hidden="true" focusable="false" data-prefix="fad" data-icon="spinner" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-spinner fa-w-16 fa-spin fa-lg"><g class="fa-group"><path fill="currentColor" d="M108.92 355.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 416a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm208-208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm-60.92 147.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm0-198.16a48 48 0 1 0-48-48 48 48 0 0 0 48 48z" class="fa-secondary"></path><path fill="currentColor" d="M108.92 60.92a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM48 208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 0a48 48 0 1 0 48 48 48 48 0 0 0-48-48z" class="fa-primary"></path></g></svg></div>
