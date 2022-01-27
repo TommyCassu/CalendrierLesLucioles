@@ -92,4 +92,51 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute("main");
 }
+
+#[Route('/{id}/changemdp', name: 'user_changemdp' )]
+    public function editmdp(Request $request, User $user, UserPasswordHasherInterface $userPass, EntityManagerInterface $entityManager): Response
+    {
+        //Verification mot de passe
+            $newPass = $request->request->get('pass');
+            dump($newPass);
+            $newPassConf = $request->request->get('passConf');
+                if ($newPass != null){
+                    if ($newPass == $newPassConf){
+                            $passHash = ($userPass->hashPassword($user, $newPass)); 
+                            $user->setPassword($passHash);
+                            $user->setModifpass(1);
+                        }else{
+                            $this->addFlash(
+                                'alert',
+                                'Veuillez entrez deux mot de passe identique'
+                            );
+                        }
+                    }else{
+                        $this->addFlash(
+                            'alert',
+                            'Veuillez rentrer le nouveau mot de passe'
+                        );
+                    }
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("main");
+}
+
+
+
+#[Route('/{id}/editmdp', name: 'user_editmdp' )]
+    public function showmdp(Request $request, User $user, UserPasswordHasherInterface $userPass, EntityManagerInterface $entityManager): Response
+    {
+        $userLoggedId = $this->security->getUser()->getId();
+        $userLoggedRoles = $this->security->getUser()->getRoles()[0];
+        if ($userLoggedId == $request->get('id') || $userLoggedRoles == "ROLE_ADMIN"){
+        return $this->render('security/change.html.twig', [
+            'user' => $user,
+        ]);
+        }else{
+            return $this->redirectToRoute("main");
+        }
+    }
 }
