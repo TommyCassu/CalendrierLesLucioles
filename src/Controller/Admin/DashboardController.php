@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Calendar;
 Use App\Entity\User;
+Use App\Entity\Famille;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -39,7 +40,8 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Accueil', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users', User::class);
-        yield MenuItem::linkToCrud('Calendrier', 'far fa-calendar', Calendar::class);
+        yield MenuItem::linkToCrud('Famille', 'fas fa-house-user', Famille::class);
+        yield MenuItem::linkToCrud('Gardes', 'far fa-calendar', Calendar::class);
         yield MenuItem::linkToLogout('Déconnexion', 'fas fa-sign-out-alt');
     }
 }

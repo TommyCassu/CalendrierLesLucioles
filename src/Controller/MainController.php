@@ -17,13 +17,12 @@ class MainController extends AbstractController
     
 
     #[Route('/main', name: 'main')]
-
     public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository, FamilleRepository $familleRepository)
     {
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
-        $events = $calendar->findAll();   
-  
+        $events = $calendar->findAll(); 
+        if ($user->getModifpass() != 0){
         if ($user != NULL) {
             $familleId = $famille->getId();
             $userId = $user->getId();
@@ -101,5 +100,8 @@ class MainController extends AbstractController
             return $this->render('calendrier/index.html.twig',['data' => compact('data','user')]);
         }
         
+    }else{
+        return $this->render('security/change.html.twig',['user' => $user]);
     }
+}
 }
