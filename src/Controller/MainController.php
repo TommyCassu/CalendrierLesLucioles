@@ -23,6 +23,7 @@ class MainController extends AbstractController
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
         $events = $calendar->findAll(); 
+        $userse = $userRepository->findAll();
         if ($user->getModifpass() != 0){
         if ($user != NULL) {
             $familleId = $famille->getId();
