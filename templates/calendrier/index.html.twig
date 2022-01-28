@@ -51,7 +51,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 
                     {% for user in ListeUtilisateurs %}
                     <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6 mb-4'>
-                        <div  class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
+                        <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
                     </div>
                     {%  endfor %}
                     </div>
@@ -66,7 +66,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                     {# Affichage en utilisateur lambda #}
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
                     <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6'>
-                        <div  class='fc-event-main h-10 text-center content-center'>{{data.user.username}}</div>
+                        <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{data.user.username}} {{data.user.nom}}</div>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     <div>
@@ -156,8 +156,6 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
     }
   });
 
- 
-  
 
   //On stock data raw(controller) dans event 
   const events = {{data.data|raw}} 
@@ -173,9 +171,22 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
       isAdmin = true
     {% endif %}
   {% endfor %}
-  events.forEach(function(event) {if (event.user_id == userId || isAdmin) {event.editable=true, event.overlap=false, event.eventColor='#378006'}})
+
+  //Autorise la modification des events pour l'utilisateur 
+  events.forEach(function(event) {if (event.user_id == userId) {event.editable=true, event.overlap=false}})
+
+  //Interdit La modification pour l'utilisateur de modifier une date sur elle est antérieur a la date actuelle
+  events.forEach(function(event) {var dateStart = new Date(event.start); dateStart.setMonth(dateStart.getMonth()-1); if (dateStart <= new Date()) {event.editable=false, event.overlap=false}})
   
-  events.forEach(function(event) {if (event.user_id == userId) {}})
+  //Autorise l'admin a modifier toutes les gardes
+  events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
+  
+  // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
+  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#06b6e9', event.borderColor='#06b6e9'}})
+
+  // Interdit la superposition de deux gardes
+  events.forEach(function(event) {if (true) {event.overlap=false}})
+
 
 
 
@@ -262,26 +273,27 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         rgbArray = rgbArray.replace(")", "")
         rgbArray = rgbArray.split(",")
         hexCodeBG = rgbToHex(parseInt(rgbArray[0]), parseInt(rgbArray[1]), parseInt(rgbArray[2]))
-
-        let donnees = {
-            "title":e.draggedEl.innerText,
-            "user_id":e.draggedEl.id,
-            "famille_id":familleId,
-            "description":"",
-            "start":e.date,
-            "backgroundColor":hexCodeBG,
-            "borderColor":hexCodeBG,
-            "textColor":'#ffffff',
-            "allDay":e.allDay,
-            "end":null,
-        }
-        // Envoie sous forme de requête post les données
-        let xhr = new XMLHttpRequest
-        xhr.open("POST", url)
-        xhr.send(JSON.stringify(donnees))
-
-        //location.reload();
+            
+              let donnees = {
+              "title":e.draggedEl.innerText,
+              "user_id":e.draggedEl.id,
+              "famille_id":e.draggedEl.children[0].id,
+              "description":"",
+              "start":e.date,
+              "backgroundColor":hexCodeBG,
+              "borderColor":hexCodeBG,
+              "textColor":'#ffffff',
+              "allDay":e.allDay,
+              "end":null,
+          }
+              // Envoie sous forme de requête post les données
+              let xhr = new XMLHttpRequest
+              xhr.open("POST", url)
+              xhr.send(JSON.stringify(donnees))
+            
+        location.reload();
     })
+          
 
     //Supression d'un évènement lorsque l'on de drag and drop depuis le calendrier jusqu'a la zone grise a gauche
     calendar.on('eventDragStop', (e) => {    
@@ -308,6 +320,8 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
     
 
   calendar.render();
+
+  
 });
     </script>
 

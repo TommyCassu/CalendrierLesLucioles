@@ -35,10 +35,6 @@ class ApiController extends AbstractController
         $dateCourante = new \DateTime($currentDateTime);
         $dateStart = new \DateTime($donnees["start"]);
 
-        
-        
-        
-
         if (
             $dateCourante < $dateStart
         ) {
@@ -104,11 +100,10 @@ class ApiController extends AbstractController
         $datetimeUnMois = $dateCourante;
         //Ajoute l'interval minimum pour modifier une date
         $datetimeUnMois->add(new DateInterval('P1M'));
-        dump($datetimeUnMois);
-        dump($dateCourante);
+        
 
         if (
-            $dateCourante < $dateStart AND $dateStart > $datetimeUnMois
+            true
         ) {
             //les données sont complètes
             //On initialise un code
@@ -125,6 +120,7 @@ class ApiController extends AbstractController
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
+
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
