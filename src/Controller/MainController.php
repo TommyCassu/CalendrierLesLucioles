@@ -22,10 +22,8 @@ class MainController extends AbstractController
         ini_set('intl.default_locale', 'fr-FR');
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
-        $events = $calendar->findAll();
-        $userse = $userRepository->findAll();
-        
-  
+        $events = $calendar->findAll(); 
+        if ($user->getModifpass() != 0){
         if ($user != NULL) {
             $familleId = $famille->getId();
             $userId = $user->getId();
@@ -105,5 +103,8 @@ class MainController extends AbstractController
             return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse]);
         }
         
+    }else{
+        return $this->render('security/change.html.twig',['user' => $user]);
     }
+}
 }
