@@ -1,0 +1,14 @@
+{# templates/mail/rappel.html.twig #}
+<h1>Bonjour, {{username}} !</h1>
+<style>
+
+</style>
+
+<p>
+    Voici un rappel des prochaines gardes que vous avez placée(s) sur notre calendrier.
+</p>
+
+<div class="text-2xl"> Vos prochaines garde sont :<br>
+{% for garde in tableaugarde %}
+        {{garde.date|date("Y-m-d",'Europe/Paris')}}<br>
+    {% endfor %}</div>
