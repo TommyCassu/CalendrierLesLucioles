@@ -19,6 +19,7 @@ class MainController extends AbstractController
     #[Route('/main', name: 'main')]
     public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository, FamilleRepository $familleRepository)
     {
+        ini_set('intl.default_locale', 'fr-FR');
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
         $events = $calendar->findAll(); 
@@ -51,12 +52,13 @@ class MainController extends AbstractController
                         'textColor' => $textColor,
                         'borderColor' => $borderColor
                     ];
-                    
+                    usort($listeDesGardes, function($a, $b) {
+                        return ($a['dDebut'] < $b['dDebut']) ? -1 : 1;
+                      });
             }
-            
+            $userRole = $user->getRoles();
+   
         }
-
-
 
         
         $rdvs = [];
@@ -93,11 +95,12 @@ class MainController extends AbstractController
         }
 
         $data = json_encode($rdvs);
+        //$lUsers = json_encode($ListeUsers);
         if (isset($listeDesGardes)){
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse]);
             
         }else{
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user')]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse]);
         }
         
     }else{

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateInterval;
 use App\Entity\User;
 use App\Entity\Famille;
 use App\Entity\Calendar;
@@ -30,10 +31,14 @@ class ApiController extends AbstractController
        
         // On récupère le json et on le décode
         $donnees = json_decode($request->getContent(), true, 512, 0);
+        $currentDateTime = date('c');
+        $dateCourante = new \DateTime($currentDateTime);
+        $dateStart = new \DateTime($donnees["start"]);
 
         if (
-            1 + 1 == 2
+            $dateCourante < $dateStart
         ) {
+           
             //Si les données sont complètes On initialise un code
             $code = 200;
 
@@ -52,7 +57,7 @@ class ApiController extends AbstractController
                         ->find($donnees["famille_id"]);
 
             //On hydrate l'objet avec les données
-            $dateStart = new \DateTime($donnees["start"]);
+            
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
@@ -86,8 +91,19 @@ class ApiController extends AbstractController
         // on récupère les données
         $donnees = json_decode($request->getContent(), true, 512, 0);
 
+        $currentDateTime = date('c');
+        $dateCourante = new \DateTime($currentDateTime);
+        $dateStart = new \DateTime($donnees["start"]);
+
+
+        //1 mois d'écart
+        $datetimeUnMois = $dateCourante;
+        //Ajoute l'interval minimum pour modifier une date
+        $datetimeUnMois->add(new DateInterval('P1M'));
+        
+
         if (
-            1 + 1 == 2
+            true
         ) {
             //les données sont complètes
             //On initialise un code
@@ -104,6 +120,7 @@ class ApiController extends AbstractController
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
+
 
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
@@ -127,12 +144,16 @@ class ApiController extends AbstractController
         ]);
     }
 
-    #[Route('/api/{id}/delete', name: 'api_event_delete', methods: ['POST'])]
+    #[Route('/api/{id}/delete', name: 'api_event_delete', methods: ['POST','GET'])]
     public function deleteEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
     {
         // on récupère les données
-        $donnees = json_decode($request->getContent(), true, 512, 0);
+        //$donnees = json_decode($request->getContent(), true, 512, 0);
+        
         $id = $calendar->getId();
+
+        $currentDateTime = date('c');
+        $dateCourante = new \DateTime($currentDateTime);
         
         if (
             1 + 1 == 2

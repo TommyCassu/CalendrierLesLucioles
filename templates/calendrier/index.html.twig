@@ -13,6 +13,23 @@
 box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
       }
 
+      ::-webkit-scrollbar{
+      width: 13px;
+      height: 13px;
+      }
+      ::-webkit-scrollbar-thumb{
+      background: #B3AFB3;
+      border-radius: 9px;
+      }
+      ::-webkit-scrollbar-thumb:hover{
+      background: #B3AFB3;
+      }
+      ::-webkit-scrollbar-track{
+      background: #FFFFFF;
+      border-radius: 9px;
+      box-shadow: inset 0px 0px 0px 0px #F0F0F0;
+      }
+
     </style>
     
 
@@ -25,9 +42,31 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         <div class="flex h-screen w-screen ">
             <div id="liste" class="flex bg-slate-300  w-1/6 justify-center rounded-r-2xl">
                 <div id='external-events'>
+                    
+                    {# Affichage en admin #}
+                    {% if utilisateurRole == 'ROLE_ADMIN' %}
+
+                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
+                    <div style="overflow-y:scroll; height:350px;">
+
+                    {% for user in ListeUtilisateurs %}
+                    <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6 mb-4'>
+                        <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
+                    </div>
+                    {%  endfor %}
+                    </div>
+                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
+                    
+                    <div>
+                     
+                    </div>
+                    
+
+                    {% else %}
+                    {# Affichage en utilisateur lambda #}
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
                     <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6'>
-                        <div  class='fc-event-main h-10 text-center content-center'>{{data.user.username}}</div>
+                        <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{data.user.username}} {{data.user.nom}}</div>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     <div>
@@ -56,7 +95,9 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                             <div  class='h-10 text-center content-center text-white'>Pas de garde</div>
                           </div>
                       {% endif %}
-                    </div>
+                      </div>
+                    {% endif %}  
+                    
                     
             </div>
         </div>
@@ -115,13 +156,12 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
     }
   });
 
-  //Onstock la liste des garde de l'utilisateur 
- 
 
   //On stock data raw(controller) dans event 
   const events = {{data.data|raw}} 
   // On stock l'userId
   const userId = {{data.user.id}}
+  
   const familleId = {{data.user.famille.id}}
   
   // On vérifie le rôle de l'utilisateur connecté et on lui permet de modifier les events qui lui appartiennent
@@ -131,13 +171,33 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
       isAdmin = true
     {% endif %}
   {% endfor %}
-  events.forEach(function(event) {if (event.user_id == userId || isAdmin) {event.editable=true, event.overlap=false}})
+
+  //Autorise la modification des events pour l'utilisateur 
+  events.forEach(function(event) {if (event.user_id == userId) {event.editable=true, event.overlap=false}})
+
+  //Interdit La modification pour l'utilisateur de modifier une date sur elle est antérieur a la date actuelle
+  events.forEach(function(event) {var dateStart = new Date(event.start); dateStart.setMonth(dateStart.getMonth()-1); if (dateStart <= new Date()) {event.editable=false, event.overlap=false}})
+  
+  //Autorise l'admin a modifier toutes les gardes
+  events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
+  
+  // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
+  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#06b6e9', event.borderColor='#06b6e9'}})
+
+  // Interdit la superposition de deux gardes
+  events.forEach(function(event) {if (true) {event.overlap=false}})
+
+
 
 
 // Création de calendrier avec les différentes options que l'on choisis
   var calendar = new Calendar(calendarEl, {
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
     inialView: 'dayGridMonth',
+    validRange: {
+    start: '2021-09-01',
+    end:'2022-07-10'
+    },
     selectable: true,
     hiddenDays: [ 6, 0 ],
     locales: 'all',
@@ -174,7 +234,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
           xhr.open("POST", url)
           xhr.send(JSON.stringify(vacances))
 
-          //location.reload();
+          location.reload();
         
       }
     {% endif %}
@@ -213,26 +273,27 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         rgbArray = rgbArray.replace(")", "")
         rgbArray = rgbArray.split(",")
         hexCodeBG = rgbToHex(parseInt(rgbArray[0]), parseInt(rgbArray[1]), parseInt(rgbArray[2]))
-
-        let donnees = {
-            "title":e.draggedEl.innerText,
-            "user_id":e.draggedEl.id,
-            "famille_id":familleId,
-            "description":"",
-            "start":e.date,
-            "backgroundColor":hexCodeBG,
-            "borderColor":hexCodeBG,
-            "textColor":'#ffffff',
-            "allDay":e.allDay,
-            "end":null,
-        }
-        // Envoie sous forme de requête post les données
-        let xhr = new XMLHttpRequest
-        xhr.open("POST", url)
-        xhr.send(JSON.stringify(donnees))
-
+            
+              let donnees = {
+              "title":e.draggedEl.innerText,
+              "user_id":e.draggedEl.id,
+              "famille_id":e.draggedEl.children[0].id,
+              "description":"",
+              "start":e.date,
+              "backgroundColor":hexCodeBG,
+              "borderColor":hexCodeBG,
+              "textColor":'#ffffff',
+              "allDay":e.allDay,
+              "end":null,
+          }
+              // Envoie sous forme de requête post les données
+              let xhr = new XMLHttpRequest
+              xhr.open("POST", url)
+              xhr.send(JSON.stringify(donnees))
+            
         location.reload();
     })
+          
 
     //Supression d'un évènement lorsque l'on de drag and drop depuis le calendrier jusqu'a la zone grise a gauche
     calendar.on('eventDragStop', (e) => {    
@@ -252,13 +313,15 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                 xhr.open("POST", url)
                 xhr.send()
                 event.remove()
-                location.reload();
+                //location.reload();
         }
         
     })
     
 
   calendar.render();
+
+  
 });
     </script>
 
