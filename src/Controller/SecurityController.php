@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
             ->from('mathbroche@gmail.com')
             ->to($user->getEmail())
             ->subject('Voici vos identifiants !')
-            ->html('<p style="border: 2px solid #e66465">Votre nom est '.$user->getEmail().'</p>
+            ->html('<p>Votre nom est '.$user->getEmail().'</p>
             <br>'.'Votre mot de passe est '.$user->getPassword().''
             );
 
