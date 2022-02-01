@@ -14,21 +14,21 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
       }
 
       ::-webkit-scrollbar{
-      width: 13px;
-      height: 13px;
-      }
-      ::-webkit-scrollbar-thumb{
-      background: #B3AFB3;
-      border-radius: 9px;
-      }
-      ::-webkit-scrollbar-thumb:hover{
-      background: #B3AFB3;
-      }
-      ::-webkit-scrollbar-track{
-      background: #FFFFFF;
-      border-radius: 9px;
-      box-shadow: inset 0px 0px 0px 0px #F0F0F0;
-      }
+        width: 13px;
+        height: 13px;
+        }
+        ::-webkit-scrollbar-thumb{
+        background: #B3AFB3;
+        border-radius: 9px;
+        }
+        ::-webkit-scrollbar-thumb:hover{
+        background: #B3AFB3;
+        }
+        ::-webkit-scrollbar-track{
+        background: #FFFFFF;
+        border-radius: 9px;
+        box-shadow: inset 0px 0px 0px 0px #F0F0F0;
+        }
       
       .el {background-image: url(..\asset\circle-scatter-haikei.svg);}
     </style>
@@ -50,13 +50,34 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
                     {% if utilisateurRole == 'ROLE_ADMIN' %}
 
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div style="overflow-y:scroll; height:350px;">
+                    <div style="overflow-y:scroll; height:450px;">
+                    {% for famille in listeFamille %}
+                      <h2 class=" text-center text-sm font-['Open_Sans'] mb-2" onclick="openForm()">{{famille.nom}} -
+                      {% for garde in nbgarde %}
+                        {% if garde.id == famille.id %}
+                          {% if garde.nb < 5 %}
+                          <a class="text-red-500">{{garde.nb}} </a>
+                          {% else %}
+                          <a class="text-green-500">{{garde.nb}} </a>
+                          {% endif %}
+                        {% endif %}
 
-                    {% for user in ListeUtilisateurs %}
-                    <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6 mb-4'>
-                        <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
-                    </div>
-                    {%  endfor %}
+                      {% endfor %} Gardes </h2>
+                        <ul>
+                      {% for user in ListeUtilisateurs %}
+                      {% if famille.id == user.famille.id %}
+                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6 mb-1'>
+                          
+                          <li >
+                          <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
+                          </li>
+                          
+                      </div>
+                      {% endif %}
+                      {%  endfor %}
+                    {%  endfor %}  
+
+
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     
@@ -162,18 +183,24 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
         var z = document.getElementById("tipsClose");
 
 
+
+
         if (x.style.display === "none") {
           setTimeout(function() {
           $("#tips").css('display','block')
           }, 100);
           y.style.display = "none";
           z.style.display = "block";
+          
+
           document.getElementById("calendar-container").className = "transition -translate-x-16 absolute top-16 left-96 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
 
         } else {
           x.style.display = "none";
           y.style.display = "block";
           z.style.display = "none";
+          
+
           document.getElementById("calendar-container").className = "transition  translate-x-10  absolute top-16 right-56 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
         }
       }

@@ -24,6 +24,17 @@ class MainController extends AbstractController
         $famille = $this->getUser()->getFamille();
         $events = $calendar->findAll(); 
         $userse = $userRepository->findAll();
+        $listeFamille = $familleRepository->findAll();
+
+        $nbgarde=[];
+        foreach($listeFamille as $famille){
+            $nbgarde[]=[
+                'nb' => sizeof($famille->getCalendars()),
+                'nom' => $famille->getNom(),
+                'id' => $famille->getId(),
+            ];
+        }
+
         if ($user->getModifpass() != 0){
         if ($user != NULL) {
             $familleId = $famille->getId();
@@ -98,10 +109,10 @@ class MainController extends AbstractController
         $data = json_encode($rdvs);
         //$lUsers = json_encode($ListeUsers);
         if (isset($listeDesGardes)){
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse,'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
             
         }else{
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse, 'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
         }
         
     }else{
