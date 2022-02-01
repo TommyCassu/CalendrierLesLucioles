@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Année scolaire{% endblock %}
+
+{% block body %}
+
+    <form method="POST" action="{{ path('annee_edit') }}">
+    <div class="absolute w-screen h-screen flex flex-col justify-center bg-yellow-300 ">
+            {# Formulaire de connexion #}
+            <div class="px-10 w-auto p-4 shadow-2xl mx-auto rounded-2xl bg-white justify-center">
+                <div class="px-10 w-96 p-4 mx-auto">
+                    {#  #}
+                    <div class="flex justify-center text-4xl font-extrabold">
+                        <h1>Changement d'année scolaire</h1>
+                    </div>
+                    {# Zone de saisie datedebut #}
+                    <div class="mt-5">
+                        <label for="anneeDebut">Date de début :</label>
+                        <input type="date" id="anneeDebut" name="anneeDebut" placeholder="Inserez une date" class="border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none " >
+                    </div>
+                    {# Zone de saisie datefin #}    
+                    <div class="mt-5">
+                        <label for="anneeFin">Date de fin :</label>
+                        <input type="date" id="anneeFin" name="anneeFin" placeholder="Inserez une date" class="border border-gray-400 border-opacity-50 shadow-md rounded my-1.5 h-9 w-full p-1 focus:outline-none " >
+                    </div>
+                    {# Boutons de Connexion/Inscription #}
+                    <div class="mt-5 flex justify-center">
+                        <input type="submit" id="editMdp" name="editMdp" value="Confirmer" class="w-10/12 p-2.5  bg-yellow-300 rounded-lg cursor-pointer">
+                </div>
+            </div>
+        </div> 
+        </div>
+{% endblock %}
