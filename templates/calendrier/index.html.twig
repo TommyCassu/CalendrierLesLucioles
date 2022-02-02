@@ -66,11 +66,11 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
                         <ul>
                       {% for user in ListeUtilisateurs %}
                       {% if famille.id == user.famille.id %}
-                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6 mb-1'>
+                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#ffe000] border-black w-4/6 mb-1'>
                           
-                          <li >
-                          <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
-                          </li>
+                          
+                          <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{user.username}} {{user.nom}} </a></div>
+                          
                           
                       </div>
                       {% endif %}
@@ -89,7 +89,7 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
                     {% else %}
                     {# Affichage en utilisateur lambda #}
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6'>
+                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#ffe000] border-black w-4/6'>
                         <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{data.user.username}} {{data.user.nom}}</div>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
@@ -356,8 +356,8 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
               "description":"",
               "start":e.date,
               "backgroundColor":hexCodeBG,
-              "borderColor":hexCodeBG,
-              "textColor":'#ffffff',
+              "borderColor":'#000000',
+              "textColor":'#000000',
               "allDay":e.allDay,
               "end":null,
           }
