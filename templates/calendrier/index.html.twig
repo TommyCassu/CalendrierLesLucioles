@@ -10,26 +10,27 @@
           /* Shadow des interface du site */
           .shadoww{
         -webkit-box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2); 
-box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
+box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
       }
 
       ::-webkit-scrollbar{
-      width: 13px;
-      height: 13px;
-      }
-      ::-webkit-scrollbar-thumb{
-      background: #B3AFB3;
-      border-radius: 9px;
-      }
-      ::-webkit-scrollbar-thumb:hover{
-      background: #B3AFB3;
-      }
-      ::-webkit-scrollbar-track{
-      background: #FFFFFF;
-      border-radius: 9px;
-      box-shadow: inset 0px 0px 0px 0px #F0F0F0;
-      }
-
+        width: 13px;
+        height: 13px;
+        }
+        ::-webkit-scrollbar-thumb{
+        background: #B3AFB3;
+        border-radius: 9px;
+        }
+        ::-webkit-scrollbar-thumb:hover{
+        background: #B3AFB3;
+        }
+        ::-webkit-scrollbar-track{
+        background: #FFFFFF;
+        border-radius: 9px;
+        box-shadow: inset 0px 0px 0px 0px #F0F0F0;
+        }
+      
+      .el {background-image: url(..\asset\circle-scatter-haikei.svg);}
     </style>
     
 
@@ -38,22 +39,45 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
 {% block body %}
 {% include "include/retour.html.twig" %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.js" integrity="sha256-TdTSDSjuCyswg+ZC7ekTsOatmHRtTdToHybuyu2TZnY=" crossorigin="anonymous"></script>
-      <div class="flex bg-slate-200 h-screen w-screen">
+      <div class="flex h-screen w-screen el">
+      
         <div class="flex h-screen w-screen ">
-            <div id="liste" class="flex bg-slate-300  w-1/6 justify-center rounded-r-2xl">
+        
+            <div id="liste" class="z-50 flex bg-[#EEEEEE] shadoww w-1/6 justify-center rounded-r-2xl">
                 <div id='external-events'>
                     
                     {# Affichage en admin #}
                     {% if utilisateurRole == 'ROLE_ADMIN' %}
 
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div style="overflow-y:scroll; height:350px;">
+                    <div style="overflow-y:scroll; height:450px;">
+                    {% for famille in listeFamille %}
+                      <h2 class=" text-center text-sm font-['Open_Sans'] mb-2" onclick="openForm()">{{famille.nom}} -
+                      {% for garde in nbgarde %}
+                        {% if garde.id == famille.id %}
+                          {% if garde.nb < 5 %}
+                          <a class="text-red-500">{{garde.nb}} </a>
+                          {% else %}
+                          <a class="text-green-500">{{garde.nb}} </a>
+                          {% endif %}
+                        {% endif %}
 
-                    {% for user in ListeUtilisateurs %}
-                    <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6 mb-4'>
-                        <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{user.username}} {{user.nom}} </div>
-                    </div>
-                    {%  endfor %}
+                      {% endfor %} Gardes </h2>
+                        <ul>
+                      {% for user in ListeUtilisateurs %}
+                      {% if famille.id == user.famille.id %}
+                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#ffe000] border-black w-4/6 mb-1'>
+                          
+                          
+                          <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{user.username}} {{user.nom}} </a></div>
+                          
+                          
+                      </div>
+                      {% endif %}
+                      {%  endfor %}
+                    {%  endfor %}  
+
+
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     
@@ -65,7 +89,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                     {% else %}
                     {# Affichage en utilisateur lambda #}
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-black border-black w-4/6'>
+                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#ffe000] border-black w-4/6'>
                         <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{data.user.username}} {{data.user.nom}}</div>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
@@ -97,18 +121,36 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
                       {% endif %}
                       </div>
                     {% endif %}  
-                    
+                    <button id="tipsOpen"class="z-50 bg-[#2994B2] w-16 h-16 right-0 absolute top-4 mr-10 rounded-full border-black border-4 " onclick="openForm()"><i class="fas fa-info fa-2x mr-0"></i></button>
+                    <button id="tipsClose"style="display:none;"class="z-50 w-16 h-16 right-0 absolute top-1 mr-4" onclick="openForm()"><i class="far fa-times-circle fa-2x mr-0"></i></button>
                     
             </div>
         </div>
-        <div class="flex-col  z-10 w-full  ">
-          <div class="flex justify-center ">
-            <h1 class=" z-10 text-center text-lg font-['Open_Sans'] font-bold text-2xl mt-6 mb-6">Calendrier des gardes </h1>
-          </div>
-          <div id='calendar-container' class="flex m-auto h-5/6 w-8/12 bg-white  rounded-2xl">
+        
+        <div class=" flex-col w-full "><svg id="visual" viewBox="0 0 960 540" width="full" height="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="0" y="0" width="960" height="540" fill="#ececec"></rect><g fill="#ffe000"><circle r="76" cx="544" cy="382"></circle><circle r="57" cx="445" cy="70"></circle><circle r="63" cx="258" cy="228"></circle><circle r="56" cx="729" cy="42"></circle><circle r="72" cx="779" cy="341"></circle><circle r="70" cx="677" cy="538"></circle><circle r="72" cx="55" cy="347"></circle><circle r="65" cx="254" cy="407"></circle><circle r="70" cx="189" cy="50"></circle><circle r="71" cx="941" cy="477"></circle><circle r="70" cx="422" cy="491"></circle><circle r="57" cx="913" cy="125"></circle><circle r="63" cx="666" cy="232"></circle></g></svg>
           
-              <div id='calendar' class=" w-11/12 h-5/6 m-auto   bg-white"></div>
-          </div>
+            
+            <div id='calendar-container' class="absolute top-16 right-44 h-5/6 w-8/12 bg-white shadoww  rounded-2xl">
+            
+                <div id='calendar' class="flex mt-16 ml-14 w-11/12 h-5/6   bg-white"></div>
+            </div>
+            <div style="display:none;" id="tips">
+              <div class="absolute top-16 right-8 w-64 h-56 bg-white shadoww  rounded-2xl transition translate-x-1"> 
+                <div class="mt-4 mb-4 text-center text-lg font-['Open_Sans'] font-bold text-mg">Ajouter une garde</div>
+                <div class="text-center ml-4 mr-4 text-base font-['Open_Sans'] text-mg">Cliquez et maintenez sur votre prénom en haut a gauche puis glissez jusqu'a la date que vous souhaitez puis relachez le clique</div>
+              </div>
+              <div class="absolute top-80 right-8 w-64 h-56 bg-white shadoww  rounded-2xl"> 
+                <div class="mt-4 mb-4 text-center text-lg font-['Open_Sans'] font-bold text-mg">Supprimer une garde</div>
+                <div class="text-center ml-4 mr-4 text-base font-['Open_Sans'] text-mg">Cliquez et maintenez sur l'une de vos gardes sur le calendrier et glisser la sur la partie gauche de la page </div>
+              </div>
+              <div class="absolute bottom-24 right-8 w-64 h-48 bg-white shadoww  rounded-2xl"> 
+                <div class="mt-4 mb-4 text-center text-lg font-['Open_Sans'] font-bold text-mg">Besoin d'aide<i class="ml-1 far fa-question-circle"></i></div>
+                <div class="mt-4 flex justify-center ">
+                <button class=" z-20 w-8/12 h-10 m-auto  bg-[#2994B2] rounded-lg font-bold"><a href="mailto:tommy.cassu@hotmail.com" > Envoyer un mail </a></button>
+                
+              </div>
+              </div>
+            </div>
         </div>
         
         
@@ -133,6 +175,39 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
+    //azeaeazeaze
+    
+      function openForm() {
+        var x = document.getElementById("tips");
+        var y = document.getElementById("tipsOpen");
+        var z = document.getElementById("tipsClose");
+
+
+
+
+        if (x.style.display === "none") {
+          setTimeout(function() {
+          $("#tips").css('display','block')
+          }, 100);
+          y.style.display = "none";
+          z.style.display = "block";
+          
+
+          document.getElementById("calendar-container").className = "transition -translate-x-16 absolute top-16 left-96 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
+
+        } else {
+          x.style.display = "none";
+          y.style.display = "block";
+          z.style.display = "none";
+          
+
+          document.getElementById("calendar-container").className = "transition  translate-x-10  absolute top-16 right-56 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
+        }
+      }
+      
+      function closeForm() {
+        document.getElementById("tips").style.display="none";
+      }
     
     // permet de prendre les nombre en hexiDecimal pour obtenir le code HEX
     function rgbToHex(r, g, b) {
@@ -182,7 +257,7 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
   events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
   
   // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
-  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#06b6e9', event.borderColor='#06b6e9'}})
+  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#2994B2', event.borderColor='#2994B2'}})
 
   // Interdit la superposition de deux gardes
   events.forEach(function(event) {if (true) {event.overlap=false}})
@@ -281,8 +356,8 @@ box-shadow: 1px 0px 15px 11px rgba(0,0,0,0.2);
               "description":"",
               "start":e.date,
               "backgroundColor":hexCodeBG,
-              "borderColor":hexCodeBG,
-              "textColor":'#ffffff',
+              "borderColor":'#000000',
+              "textColor":'#000000',
               "allDay":e.allDay,
               "end":null,
           }
