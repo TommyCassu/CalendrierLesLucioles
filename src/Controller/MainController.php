@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-
+use App\Repository\AnneeRepository;
 use App\Repository\CalendarRepository;
 use App\Repository\FamilleRepository;
 use App\Repository\UserRepository;
@@ -17,7 +17,7 @@ class MainController extends AbstractController
     
 
     #[Route('/main', name: 'main')]
-    public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository, FamilleRepository $familleRepository)
+    public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository, FamilleRepository $familleRepository, AnneeRepository $anneeRepository)
     {
         ini_set('intl.default_locale', 'fr-FR');
         $user = $this->getUser();
@@ -25,7 +25,9 @@ class MainController extends AbstractController
         $events = $calendar->findAll(); 
         $userse = $userRepository->findAll();
         $listeFamille = $familleRepository->findAll();
-
+        $AnneeCalendrier = $anneeRepository->findAll();
+        
+        
         $nbgarde=[];
         foreach($listeFamille as $famille){
             $nbgarde[]=[
@@ -106,13 +108,20 @@ class MainController extends AbstractController
             }
         }
 
+        $anneeDuCalendrier= [];
+        $anneeDuCalendrier=[
+            'DateDebutCalendrier'=> $AnneeCalendrier[0]->getDateDebut()->format('Y-m-d H:i:s'),
+            'DateFinCalendrier'=> $AnneeCalendrier[0]->getDateFin()->format('Y-m-d H:i:s')
+        ];
+
         $data = json_encode($rdvs);
+        $annees = json_encode($anneeDuCalendrier);
         //$lUsers = json_encode($ListeUsers);
         if (isset($listeDesGardes)){
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse,'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user','annees'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse,'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
             
         }else{
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse, 'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user','annees'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse, 'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
         }
         
     }else{
