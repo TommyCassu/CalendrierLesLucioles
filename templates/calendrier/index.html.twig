@@ -45,7 +45,7 @@ body::-webkit-scroll-thumb {
                     {% if utilisateurRole == 'ROLE_ADMIN' %}
                     <div>
                         <a href="{{ path('admin') }}">
-                          <button class="z-50 bg-[#3DB2FF] w-20 h-20 right-0 absolute bottom-32 mr-16 rounded-full border-black border-4 " onclick="{{ path('admin') }}" id="logout"><i class="fas fa-cog fa-3x"></i></button>
+                          <button class="z-50 bg-[#3DB2FF] w-20 h-20 right-0 absolute bottom-32 mr-16 rounded-full border-black border-4 " onclick="{{ path('admin') }}" id="logout" style="display:block;"><i class="fas fa-cog fa-3x"></i></button>
                         </a>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
@@ -66,8 +66,7 @@ body::-webkit-scroll-thumb {
                       {% for user in ListeUtilisateurs %}
                       {% if famille.id == user.famille.id %}
                       <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6 mb-1'>
-                          
-                          
+
                           <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{user.username}} {{user.nom}} </a></div>
                           
                           
@@ -80,10 +79,11 @@ body::-webkit-scroll-thumb {
                     
 
                     {% else %}
+
                     {# Affichage en utilisateur lambda #}
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#ffe000] border-black w-4/6'>
-                        <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'>{{data.user.username}} {{data.user.nom}}</div>
+                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6'>
+                        <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{data.user.username}} {{data.user.nom}} </a></div>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
                     <div>
@@ -93,13 +93,13 @@ body::-webkit-scroll-thumb {
                           {% if garde.dDebut|date("Y-m-d","Europe/Paris") > ("now"|date("Y-m-d","Europe/Paris")) %}
                             <div class='w-full mt-3 flex inline space-x-2  '>
                               <div class="mt-1"><svg class="svg-inline--fa fa-spinner fa-w-12 fa-spin fa-lg w-4"aria-hidden="true" focusable="false" data-prefix="fad" data-icon="spinner" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-spinner fa-w-16 fa-spin fa-lg"><g class="fa-group"><path fill="currentColor" d="M108.92 355.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 416a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm208-208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm-60.92 147.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm0-198.16a48 48 0 1 0-48-48 48 48 0 0 0 48 48z" class="fa-secondary"></path><path fill="currentColor" d="M108.92 60.92a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM48 208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 0a48 48 0 1 0 48 48 48 48 0 0 0-48-48z" class="fa-primary"></path></g></svg></div>
-                              <div  class='h-10 text-center content-center text-green-700 font-bold '>{{garde.dDebut|date("l d F",'Europe/Paris')}}</div>
+                              <div  class='h-10 text-center content-center text-green-700 font-bold '>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</div>
                             </div>
                           {% else %}
                             <div class='w-full mt-3 flex inline space-x-2'>
                             
                               <div class="" ><i class="fas fa-check-circle fa-1x "></i> </div>
-                              <div class='h-10 text-center content-center text-gray-700 font-bold'>{{garde.dDebut|date("l d F",'Europe/Paris')}}  </div>
+                              <div class='h-10 text-center content-center text-gray-700 font-bold'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}  </div>
                             
                             </div>
                           {% endif %}
@@ -114,8 +114,8 @@ body::-webkit-scroll-thumb {
                       {% endif %}
                       </div>
                     {% endif %}  
-                    <button id="tipsOpen"class="z-50 bg-[#3DB2FF] w-16 h-16 right-0 absolute top-4 mr-10 rounded-full border-black border-4 " onclick="openForm()"><i class="fas fa-info fa-2x mr-0"></i></button>
-                    <button id="tipsClose"style="display:none;"class="z-50 bg-[#3DB2FF] rounded-full  w-8 h-8 right-4 absolute top-4 mr-4" onclick="openForm()"><i class="far fa-times-circle fa-2x mr-0"></i></button>
+                    <button id="tipsOpen"class="z-50 bg-[#3DB2FF] w-16 h-16 right-0 absolute top-4 mr-10 rounded-full border-black border-4 " onclick="PanelGauche();"><i class="fas fa-info fa-2x mr-0"></i></button>
+                    <button id="tipsClose"style="display:none;"class="z-50 bg-[#3DB2FF] rounded-full  w-8 h-8 right-4 absolute top-4 mr-4" onclick="PanelGauche()"><i class="far fa-times-circle fa-2x mr-0"></i></button>
                     
             </div>
         </div>
@@ -168,39 +168,40 @@ body::-webkit-scroll-thumb {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
-    //JS
     
+      //EFFET glissade et apparition sur le tuto
+      function PanelGauche(){
+        openForm();
+        LogoAdminForm();
+      }
       function openForm() {
         var x = document.getElementById("tips");
         var y = document.getElementById("tipsOpen");
         var z = document.getElementById("tipsClose");
         var l = document.getElementById("logout");
 
-
-
-
         if (x.style.display === "none") {
           setTimeout(function() {
           $("#tips").css('display','block')
           }, 100);
           y.style.display = "none";
-          z.style.display = "block";
-          l.style.display = "none";
-          
-          
-
+          z.style.display = "block"; 
           document.getElementById("calendar-container").className = "transition -translate-x-16 absolute top-16 left-96 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
 
         } else {
           x.style.display = "none";
           y.style.display = "block";
-          z.style.display = "none";
-          l.style.display = "block";
-          
-
-          
-
+          z.style.display = "none";  
           document.getElementById("calendar-container").className = "transition  translate-x-10  absolute top-16 right-56 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
+        }
+      }
+
+      function LogoAdminForm() {
+        var l = document.getElementById("logout");
+        if (l.style.display === "block") {
+          l.style.display = "none";
+        } else {
+          l.style.display = "block";
         }
       }
       
