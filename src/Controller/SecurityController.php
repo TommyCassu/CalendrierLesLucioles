@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
             ->from('mathbroche@gmail.com')
             ->to($user->getEmail())
             ->subject('Voici vos identifiants !')
-            ->html('<p style="border: 2px solid #e66465">Votre nom est '.$user->getEmail().'</p>
+            ->html('<p>Votre nom est '.$user->getEmail().'</p>
             <br>'.'Votre mot de passe est '.$user->getPassword().''
             );
 
@@ -93,7 +93,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {

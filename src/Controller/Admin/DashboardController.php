@@ -41,7 +41,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Accueil', 'fa fa-home');
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users', User::class);
         yield MenuItem::linkToCrud('Famille', 'fas fa-house-user', Famille::class);
-        yield MenuItem::linkToCrud('Gardes', 'far fa-calendar', Calendar::class);
+        yield MenuItem::linkToUrl('Calendrier', 'far fa-calendar', '/main');
+        yield MenuItem::linkToUrl('Année Scolaire','far fa-calendar','/annee/edit');
         yield MenuItem::linkToLogout('Déconnexion', 'fas fa-sign-out-alt');
     }
 }

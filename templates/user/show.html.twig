@@ -3,6 +3,7 @@
 {% block title %}user{% endblock %}
 
 {% block body %}
+{% include "include/retourAdmin.html.twig" %}
 
     <form method="POST" action="{{ path('user_edit',{'id':user.id}) }}">
     {# Met en colonne #}
