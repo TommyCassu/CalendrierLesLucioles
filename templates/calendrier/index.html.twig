@@ -13,22 +13,17 @@
 box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
       }
 
-      ::-webkit-scrollbar{
-        width: 13px;
-        height: 13px;
-        }
-        ::-webkit-scrollbar-thumb{
-        background: #B3AFB3;
-        border-radius: 9px;
-        }
-        ::-webkit-scrollbar-thumb:hover{
-        background: #B3AFB3;
-        }
-        ::-webkit-scrollbar-track{
-        background: #FFFFFF;
-        border-radius: 9px;
-        box-shadow: inset 0px 0px 0px 0px #F0F0F0;
-        }
+      body::-webkit-scroll {
+  width: 12px;               /* width of the entire scrollbar */
+}
+body::-webkit-scroll-track {
+  background: orange;        /* color of the tracking area */
+}
+body::-webkit-scroll-thumb {
+  background-color: blue;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid orange;  /* creates padding around scroll thumb */
+}
       
       .el {background-image: url(..\asset\circle-scatter-haikei.svg);}
     </style>
@@ -50,7 +45,7 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
                     {% if utilisateurRole == 'ROLE_ADMIN' %}
 
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div style="overflow-y:scroll; height:450px;">
+                    <div class="scroller " style="width: 300px;height: 800px;overflow-y: scroll; scrollbar-color: #eeeeee; scrollbar-width: thin;">
                     {% for famille in listeFamille %}
                       <h2 class=" text-center text-sm font-['Open_Sans'] mb-2" onclick="openForm()">{{famille.nom}} -
                       {% for garde in nbgarde %}
@@ -66,7 +61,7 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
                         <ul>
                       {% for user in ListeUtilisateurs %}
                       {% if famille.id == user.famille.id %}
-                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#ffe000] border-black w-4/6 mb-1'>
+                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6 mb-1'>
                           
                           
                           <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{user.username}} {{user.nom}} </a></div>
@@ -76,12 +71,6 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
                       {% endif %}
                       {%  endfor %}
                     {%  endfor %}  
-
-
-                    </div>
-                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
-                    
-                    <div>
                      
                     </div>
                     
@@ -175,12 +164,14 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
-    //azeaeazeaze
+    //JS
     
       function openForm() {
         var x = document.getElementById("tips");
         var y = document.getElementById("tipsOpen");
         var z = document.getElementById("tipsClose");
+        
+
 
 
 
@@ -192,6 +183,7 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
           y.style.display = "none";
           z.style.display = "block";
           
+          
 
           document.getElementById("calendar-container").className = "transition -translate-x-16 absolute top-16 left-96 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
 
@@ -199,6 +191,8 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
           x.style.display = "none";
           y.style.display = "block";
           z.style.display = "none";
+          
+
           
 
           document.getElementById("calendar-container").className = "transition  translate-x-10  absolute top-16 right-56 h-5/6 w-8/12 bg-white shadoww  rounded-2xl";
@@ -231,7 +225,8 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
     }
   });
 
-
+  
+  const AnneeCalendrier = {{data.annees|raw}}
   //On stock data raw(controller) dans event 
   const events = {{data.data|raw}} 
   // On stock l'userId
@@ -257,7 +252,7 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
   events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
   
   // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
-  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#2994B2', event.borderColor='#2994B2'}})
+  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#ffe000', event.borderColor='#000000'}})
 
   // Interdit la superposition de deux gardes
   events.forEach(function(event) {if (true) {event.overlap=false}})
@@ -270,8 +265,8 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
     inialView: 'dayGridMonth',
     validRange: {
-    start: '2021-09-01',
-    end:'2022-07-10'
+    start: AnneeCalendrier.DateDebutCalendrier,
+    end: AnneeCalendrier.DateFinCalendrier
     },
     selectable: true,
     hiddenDays: [ 6, 0 ],
@@ -355,7 +350,7 @@ box-shadow: 1px 0px 15px 8px rgba(0,0,0,0.2);
               "famille_id":e.draggedEl.children[0].id,
               "description":"",
               "start":e.date,
-              "backgroundColor":hexCodeBG,
+              "backgroundColor":'#2994B2',
               "borderColor":'#000000',
               "textColor":'#000000',
               "allDay":e.allDay,
