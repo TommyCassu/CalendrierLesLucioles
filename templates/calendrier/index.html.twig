@@ -51,7 +51,7 @@ body::-webkit-scroll-thumb {
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
                     <div class="scroller " style="width: 300px;height: 800px;overflow-y: scroll; scrollbar-color: #eeeeee; scrollbar-width: thin;">
                     {% for famille in listeFamille %}
-                      <h2 class=" text-center text-sm font-['Open_Sans'] mb-2" onclick="openForm()">{{famille.nom}} -
+                      <h2 class=" text-center text-sm font-['Open_Sans'] mb-2">{{famille.nom}} -
                       {% for garde in nbgarde %}
                         {% if garde.id == famille.id %}
                           {% if garde.nb < 5 %}
@@ -120,7 +120,7 @@ body::-webkit-scroll-thumb {
             </div>
         </div>
         
-        <div class=" flex-col w-full "><svg id="visual" viewBox="0 0 960 540" width="full" height="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="0" y="0" width="960" height="540" fill="#ececec"></rect><g fill="#ffe000"><circle r="76" cx="544" cy="382"></circle><circle r="57" cx="445" cy="70"></circle><circle r="63" cx="258" cy="228"></circle><circle r="56" cx="729" cy="42"></circle><circle r="72" cx="779" cy="341"></circle><circle r="70" cx="677" cy="538"></circle><circle r="72" cx="55" cy="347"></circle><circle r="65" cx="254" cy="407"></circle><circle r="70" cx="189" cy="50"></circle><circle r="71" cx="941" cy="477"></circle><circle r="70" cx="422" cy="491"></circle><circle r="57" cx="913" cy="125"></circle><circle r="63" cx="666" cy="232"></circle></g></svg>
+        <div class=" flex-col w-full "><svg id="visual" viewBox="0 0 955 545" width="full" height="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="0" y="0" width="960" height="545" fill="#ececec"></rect><g fill="#ffe000"><circle r="76" cx="544" cy="382"></circle><circle r="57" cx="445" cy="70"></circle><circle r="63" cx="258" cy="228"></circle><circle r="56" cx="729" cy="42"></circle><circle r="72" cx="779" cy="341"></circle><circle r="70" cx="677" cy="538"></circle><circle r="72" cx="55" cy="347"></circle><circle r="65" cx="254" cy="407"></circle><circle r="70" cx="189" cy="50"></circle><circle r="71" cx="941" cy="477"></circle><circle r="70" cx="422" cy="491"></circle><circle r="57" cx="913" cy="125"></circle><circle r="63" cx="666" cy="232"></circle></g></svg>
           
             
             <div id='calendar-container' class="absolute top-16 right-44 h-5/6 w-8/12 bg-white shadoww  rounded-2xl">
