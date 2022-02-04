@@ -1,21 +1,18 @@
 <?php
 
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mailer\MailerInterface;
+$mysqlConnection = new PDO(
+    'mysql:host=localhost;dbname=my_recipes;charset=utf8',
+    'root',
+    'root'
+);
 
-class script{
 
-    public function index(MailerInterface $mailer){
+$to = 'mathbroche@gmail.com';
+$subject = 'le sujet';
+$message = 'Bonjour !';
+$headers = 'From: webmaster@example.com' . "\r\n" .
+'Reply-To: webmaster@example.com' . "\r\n" .
+'X-Mailer: PHP/' . phpversion();
 
-    //envoie du mail
-        $email = (new Email())
-        ->from('mathbroche@gmail.com')
-        ->to("mathbroche@gmail.com")
-        ->subject('Voici vos identifiants !')
-        ->html('<p>Test</p>'
-        );
-
-        $mailer->send($email);
-    }
-}
+mail($to, $subject, $message, $headers);
 ?>
