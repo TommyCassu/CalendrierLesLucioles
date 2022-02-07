@@ -36,7 +36,7 @@ body::-webkit-scroll-thumb {
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.10.1/main.min.js" integrity="sha256-TdTSDSjuCyswg+ZC7ekTsOatmHRtTdToHybuyu2TZnY=" crossorigin="anonymous"></script>
       <div class="flex h-screen w-screen el">
       
-        <div class="flex h-screen w-screen ">
+        <div class="flex h-screen w-screen" style="background-image: url('/assets/LuciolesBG.png');">
         
             <div id="liste" class="z-50 flex bg-[#EEEEEE] shadoww w-1/6 justify-center rounded-r-2xl">
                 <div id='external-events'>
@@ -120,7 +120,7 @@ body::-webkit-scroll-thumb {
             </div>
         </div>
         
-        <div class=" flex-col w-full "><svg id="visual" viewBox="0 0 955 545" width="full" height="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="0" y="0" width="960" height="545" fill="#ececec"></rect><g fill="#ffe000"><circle r="76" cx="544" cy="382"></circle><circle r="57" cx="445" cy="70"></circle><circle r="63" cx="258" cy="228"></circle><circle r="56" cx="729" cy="42"></circle><circle r="72" cx="779" cy="341"></circle><circle r="70" cx="677" cy="538"></circle><circle r="72" cx="55" cy="347"></circle><circle r="65" cx="254" cy="407"></circle><circle r="70" cx="189" cy="50"></circle><circle r="71" cx="941" cy="477"></circle><circle r="70" cx="422" cy="491"></circle><circle r="57" cx="913" cy="125"></circle><circle r="63" cx="666" cy="232"></circle></g></svg>
+        <div class=" flex-col w-full ">
           
             
             <div id='calendar-container' class="absolute top-16 right-44 h-5/6 w-8/12 bg-white shadoww  rounded-2xl">
@@ -252,7 +252,7 @@ body::-webkit-scroll-thumb {
   events.forEach(function(event) {if (event.user_id == userId) {event.editable=true, event.overlap=false}})
 
   //Interdit La modification pour l'utilisateur de modifier une date sur elle est antérieur a la date actuelle
-  events.forEach(function(event) {var dateStart = new Date(event.start); dateStart.setMonth(dateStart.getMonth()-1); if (dateStart <= new Date()) {event.editable=false, event.overlap=false}})
+  events.forEach(function(event) {var dateStart = new Date(event.start); dateStart.setDate(dateStart.getDate()-7); if (dateStart <= new Date()) {console.log(dateStart.getDate()-20),event.editable=false, event.overlap=false}})
   
   //Autorise l'admin a modifier toutes les gardes
   events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
