@@ -92,14 +92,14 @@ body::-webkit-scroll-thumb {
                         
                           {% if garde.dDebut|date("Y-m-d","Europe/Paris") > ("now"|date("Y-m-d","Europe/Paris")) %}
                             <div class='w-full mt-3 flex inline space-x-2  '>
-                              <div class="mt-1"><svg class="svg-inline--fa fa-spinner fa-w-12 fa-spin fa-lg w-4"aria-hidden="true" focusable="false" data-prefix="fad" data-icon="spinner" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-spinner fa-w-16 fa-spin fa-lg"><g class="fa-group"><path fill="currentColor" d="M108.92 355.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 416a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm208-208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm-60.92 147.08a48 48 0 1 0 48 48 48 48 0 0 0-48-48zm0-198.16a48 48 0 1 0-48-48 48 48 0 0 0 48 48z" class="fa-secondary"></path><path fill="currentColor" d="M108.92 60.92a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM48 208a48 48 0 1 0 48 48 48 48 0 0 0-48-48zM256 0a48 48 0 1 0 48 48 48 48 0 0 0-48-48z" class="fa-primary"></path></g></svg></div>
-                              <div  class='h-10 text-center content-center text-green-700 font-bold '>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</div>
+                              <div class="mt-1"><i class="far fa-stopwatch fa-2x ml-2" style="color: #15803d"></i></div>
+                              <div  class='h-10 text-center content-center text-green-700 font-bold mt-2 text-lg'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</div>
                             </div>
                           {% else %}
                             <div class='w-full mt-3 flex inline space-x-2'>
                             
-                              <div class="" ><i class="fas fa-check-circle fa-1x "></i> </div>
-                              <div class='h-10 text-center content-center text-gray-700 font-bold'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}  </div>
+                              <div class="mt-1" ><i class="fas fa-check-circle fa-2x ml-2 "></i> </div>
+                              <div class='h-10 text-center content-center text-green-700 font-bold mt-2 text-lg'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</a> </div>
                             
                             </div>
                           {% endif %}
@@ -258,7 +258,7 @@ body::-webkit-scroll-thumb {
   events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
   
   // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
-  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#ffe000', event.borderColor='#000000'}})
+  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#ffe000', event.borderColor='#000000',  img='/assets/jsp.png'}})
 
   // Interdit la superposition de deux gardes
   events.forEach(function(event) {if (true) {event.overlap=false}})
@@ -275,7 +275,7 @@ body::-webkit-scroll-thumb {
     end: AnneeCalendrier.DateFinCalendrier
     },
     selectable: true,
-    hiddenDays: [ 6, 0 ],
+    hiddenDays: [ 6, 0, 3 ],
     locales: 'all',
     locale: 'fr',
     timeZone : 'Europe/Paris',
@@ -305,12 +305,12 @@ body::-webkit-scroll-thumb {
               "end":info.endStr,
               "famille_id":familleId,
           }
-          console.log(vacances)
+          console.log(info.startStr)
           let xhr = new XMLHttpRequest
           xhr.open("POST", url)
           xhr.send(JSON.stringify(vacances))
 
-          location.reload();
+          
         
       }
     {% endif %}
@@ -325,7 +325,7 @@ body::-webkit-scroll-thumb {
                     "title":e.event.title,
                     "description":e.event.extendedProps.description,
                     "start":e.event.start,
-                    "end":null,
+                    "end":e.event.end,
                     "backgroundColor":e.event.backgroundColor,
                     "borderColor":e.event.borderColor,
                     "textColor":e.event.textColor,
@@ -360,14 +360,15 @@ body::-webkit-scroll-thumb {
               "borderColor":'#000000',
               "textColor":'#000000',
               "allDay":e.allDay,
-              "end":null,
+              "end":e.date,
           }
               // Envoie sous forme de requête post les données
+              console.log(e.date)
               let xhr = new XMLHttpRequest
               xhr.open("POST", url)
               xhr.send(JSON.stringify(donnees))
             
-        location.reload();
+        //location.reload();
     })
           
 

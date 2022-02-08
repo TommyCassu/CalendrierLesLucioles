@@ -83,6 +83,7 @@ class MainController extends AbstractController
                     'user_id' => $event->getUser()->getId(),
                     'famille_id' => $event->getFamille()->getId(),
                     'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                    'end' => $event->getEnd()->format('Y-m-d H:i:s'),
                     'title' => $event->getTitle(),
                     'description' => $event->getDescription(),
                     'backgroundColor' => $event->getBackgroundColor(),
@@ -90,7 +91,7 @@ class MainController extends AbstractController
                     'textColor' => $event->getTextColor(),
                     'allDay' => $event->getAllDay(),
                     
-                    'end' => $event->getEnd()->format('Y-m-d H:i:s'),
+                    
                 ];
             }else{
                 $rdvs[]= [
@@ -98,6 +99,7 @@ class MainController extends AbstractController
                     'user_id' => $event->getUser()->getId(),
                     'famille_id' => $event->getFamille()->getId(),
                     'start' => $event->getStart()->format('Y-m-d H:i:s'),
+                    'end' => $event->getStart()->format('Y-m-d H:i:s'),
                     'title' => $event->getTitle(),
                     'description' => $event->getDescription(),
                     'backgroundColor' => $event->getBackgroundColor(),

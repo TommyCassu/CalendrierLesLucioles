@@ -34,6 +34,8 @@ class ApiController extends AbstractController
         $currentDateTime = date('c');
         $dateCourante = new \DateTime($currentDateTime);
         $dateStart = new \DateTime($donnees["start"]);
+        $dateEnd = new \DateTime($donnees["end"]);
+
 
         if (
             $dateCourante < $dateStart
@@ -62,13 +64,13 @@ class ApiController extends AbstractController
             $calendar->setTitle($donnees["title"]);
             $calendar->setDescription($donnees["description"]);
             $calendar->setStart($dateStart);
+            $calendar->setEnd($dateEnd);
             $calendar->setAllDay($donnees["allDay"]);
             $calendar->setBackgroundColor($donnees["backgroundColor"]);
             $calendar->setBorderColor($donnees["borderColor"]);
             $calendar->setTextColor($donnees["textColor"]);
             $calendar->setUser($user);
             $calendar->setFamille($famille);
-            
 
             $em->persist($calendar);
             $em->flush();
@@ -120,15 +122,29 @@ class ApiController extends AbstractController
 
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
+            $dateEnd = new \DateTime($donnees["end"]);
 
 
-            $calendar->setTitle($donnees["title"]);
-            $calendar->setDescription($donnees["description"]);
-            $calendar->setStart($dateStart);
-            $calendar->setAllDay($donnees["allDay"]);
-            $calendar->setBackgroundColor($donnees["backgroundColor"]);
-            $calendar->setBorderColor($donnees["borderColor"]);
-            $calendar->setTextColor($donnees["textColor"]);
+            if($dateEnd == null){
+                $calendar->setTitle($donnees["title"]);
+                $calendar->setDescription($donnees["description"]);
+                $calendar->setStart($dateStart);
+                $calendar->setEnd($dateStart);
+                $calendar->setAllDay($donnees["allDay"]);
+                $calendar->setBackgroundColor($donnees["backgroundColor"]);
+                $calendar->setBorderColor($donnees["borderColor"]);
+                $calendar->setTextColor($donnees["textColor"]);
+            }else{
+                $calendar->setTitle($donnees["title"]);
+                $calendar->setDescription($donnees["description"]);
+                $calendar->setStart($dateStart);
+                $calendar->setEnd($dateEnd);
+                $calendar->setAllDay($donnees["allDay"]);
+                $calendar->setBackgroundColor($donnees["backgroundColor"]);
+                $calendar->setBorderColor($donnees["borderColor"]);
+                $calendar->setTextColor($donnees["textColor"]);
+            }
+            
             $em->persist($calendar);
             $em->flush();
 
