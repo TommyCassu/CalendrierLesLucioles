@@ -258,7 +258,7 @@ body::-webkit-scroll-thumb {
   events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
   
   // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
-  events.forEach(function(event) {if (event.user_id == userId) {event.backgroundColor='#ffe000', event.borderColor='#000000',  img='/assets/jsp.png'}})
+  events.forEach(function(event) {var dateStart = new Date(event.start); var dateEnd = new Date(event.end);if (event.user_id == userId && dateStart == dateEnd) {event.backgroundColor='#ffe000', event.borderColor='#000000',  img='/assets/jsp.png'}})
 
   // Interdit la superposition de deux gardes
   events.forEach(function(event) {if (true) {event.overlap=false}})
@@ -299,8 +299,8 @@ body::-webkit-scroll-thumb {
               "description":"",
               "start":info.startStr,
               "backgroundColor":'#28c321',
-              "borderColor":'#28c321',
-              "textColor":'#ffffff',
+              "borderColor":'#000000',
+              "textColor":'#000000',
               "allDay":1,
               "end":info.endStr,
               "famille_id":familleId,
@@ -368,7 +368,7 @@ body::-webkit-scroll-thumb {
               xhr.open("POST", url)
               xhr.send(JSON.stringify(donnees))
             
-        //location.reload();
+        location.reload();
     })
           
 
