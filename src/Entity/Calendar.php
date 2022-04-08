@@ -43,6 +43,9 @@ class Calendar
     #[ORM\ManyToOne(targetEntity: Famille::class, inversedBy: 'calendars')]
     private $famille;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $datePose;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -164,6 +167,18 @@ class Calendar
     public function setFamille(?Famille $famille): self
     {
         $this->famille = $famille;
+
+        return $this;
+    }
+
+    public function getDatePose(): ?\DateTimeInterface
+    {
+        return $this->datePose;
+    }
+
+    public function setDatePose(?\DateTimeInterface $datePose): self
+    {
+        $this->datePose = $datePose;
 
         return $this;
     }

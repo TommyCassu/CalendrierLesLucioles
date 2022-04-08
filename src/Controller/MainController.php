@@ -1,5 +1,9 @@
 <?php
 
+
+
+
+
 namespace App\Controller;
 
 use App\Repository\AnneeRepository;
@@ -12,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+
 class MainController extends AbstractController
 {
     
@@ -19,6 +24,7 @@ class MainController extends AbstractController
     #[Route('/main', name: 'main')]
     public function index(CalendarRepository $calendar, UserInterface $user, UserRepository $userRepository, FamilleRepository $familleRepository, AnneeRepository $anneeRepository)
     {
+        
         ini_set('intl.default_locale', 'fr-FR');
         $user = $this->getUser();
         $famille = $this->getUser()->getFamille();
@@ -46,7 +52,8 @@ class MainController extends AbstractController
                 // Afficher la liste des gardes
             $ListeDesGardes = [];
             foreach ($user->getCalendars() as $calendar) {
-
+                
+                $id = $calendar->getId();
                 $title = $calendar->getTitle();
                 $dateStart = $calendar->getStart();
                 $dateEnd = $calendar->getEnd();
@@ -57,6 +64,7 @@ class MainController extends AbstractController
                 $borderColor = $calendar->getBorderColor();
                 
                     $listeDesGardes[] = [
+                        'id' => $id,
                         'title' => $title,
                         'dDebut' => $dateStart,
                         'dFin' => $dateEnd,
@@ -90,7 +98,7 @@ class MainController extends AbstractController
                     'borderColor' => $event->getBorderColor(),
                     'textColor' => $event->getTextColor(),
                     'allDay' => $event->getAllDay(),
-                    
+                    'datePose' => $event->getDatePose()->format('Y-m-d H:i:s'),
                     
                 ];
             }else{
@@ -106,24 +114,45 @@ class MainController extends AbstractController
                     'borderColor' => $event->getBorderColor(),
                     'textColor' => $event->getTextColor(),
                     'allDay' => $event->getAllDay(),
+                    'datePose' => $event->getDatePose()->format('Y-m-d H:i:s'),
                 ];
             }
         }
+
+        $Lutilisateur= [];
+        $Lutilisateur=[
+            'id'=> $user->getId(),
+            'username' => $user->getUsername(),
+            'nom'=> $user->getNom(),
+        ];
 
         $anneeDuCalendrier= [];
         $anneeDuCalendrier=[
             'DateDebutCalendrier'=> $AnneeCalendrier[0]->getDateDebut()->format('Y-m-d H:i:s'),
             'DateFinCalendrier'=> $AnneeCalendrier[0]->getDateFin()->format('Y-m-d H:i:s')
         ];
+        
+        if (isset($_SESSION['dateDuDebut'])){
+            $dateInit= $_SESSION['dateDuDebut'];
+        }else{
+            $currentDateTime = date('c');
+            $dateInit = new \DateTime($currentDateTime);
+        }
 
+        $Session=[
+            'DateDuDebut'=> $dateInit->format('Y-m-d')
+        ];
+        
         $data = json_encode($rdvs);
         $annees = json_encode($anneeDuCalendrier);
+        $Luser = json_encode($Lutilisateur);
+        $sessionJSON = json_encode($Session);
         //$lUsers = json_encode($ListeUsers);
         if (isset($listeDesGardes)){
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user','annees'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse,'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user','annees','Luser', 'sessionJSON'),'lGarde' => $listeDesGardes, 'utilisateurRole' => $userRole[0],'ListeUtilisateurs'=>$userse,'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
             
         }else{
-            return $this->render('calendrier/index.html.twig',['data' => compact('data','user','annees'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse, 'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
+            return $this->render('calendrier/index.html.twig',['data' => compact('data','user','annees','Luser', 'sessionJSON'),'utilisateurRole' => $userRole[0], 'ListeUtilisateurs'=>$userse, 'listeFamille' => $listeFamille, 'nbgarde' => $nbgarde]);
         }
         
     }else{

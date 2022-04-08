@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Controller;
 
@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
+session_start(); 
 class ApiController extends AbstractController
 {
     #[Route('/api', name: 'api')]
@@ -26,19 +28,19 @@ class ApiController extends AbstractController
     
     // Création d'une garde ( event ) 
     #[Route('/api/create', name: 'api_event_create', methods: ['POST'])]
-    public function createEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em)
+    public function createEvent(?Calendar $calendar, Request $request, EntityManagerInterface $em, UserInterface $user)
     {
        
         // On récupère le json et on le décode
         $donnees = json_decode($request->getContent(), true, 512, 0);
         $currentDateTime = date('c');
         $dateCourante = new \DateTime($currentDateTime);
+        $dateCourante->add(new DateInterval('PT1H'));
         $dateStart = new \DateTime($donnees["start"]);
         $dateEnd = new \DateTime($donnees["end"]);
 
-
         if (
-            $dateCourante < $dateStart
+            ($dateCourante < $dateStart) || ($user->getRoles()[0] == "ROLE_ADMIN")
         ) {
            
             //Si les données sont complètes On initialise un code
@@ -58,6 +60,7 @@ class ApiController extends AbstractController
             $famille = $em->getRepository(Famille::class)
                         ->find($donnees["famille_id"]);
 
+                        
             //On hydrate l'objet avec les données
             
 
@@ -71,10 +74,12 @@ class ApiController extends AbstractController
             $calendar->setTextColor($donnees["textColor"]);
             $calendar->setUser($user);
             $calendar->setFamille($famille);
+            $calendar->setDatePose($dateCourante);
 
             $em->persist($calendar);
             $em->flush();
 
+            $_SESSION['dateDuDebut'] = $dateStart ;
             // On retourne le code
             return new Response('Ok', $code);
         } else {
@@ -95,13 +100,8 @@ class ApiController extends AbstractController
 
         $currentDateTime = date('c');
         $dateCourante = new \DateTime($currentDateTime);
-        $dateStart = new \DateTime($donnees["start"]);
-
-
-        //1 mois d'écart
-        $datetimeUnMois = $dateCourante;
-        //Ajoute l'interval minimum pour modifier une date
-        $datetimeUnMois->add(new DateInterval('P1M'));
+        $dateCourante->add(new DateInterval('PT1H'));
+        
         
 
         if (
@@ -123,28 +123,18 @@ class ApiController extends AbstractController
             //On hydrate l'objet avec les données
             $dateStart = new \DateTime($donnees["start"]);
             $dateEnd = new \DateTime($donnees["end"]);
-
-
-            if($dateEnd == null){
-                $calendar->setTitle($donnees["title"]);
-                $calendar->setDescription($donnees["description"]);
-                $calendar->setStart($dateStart);
-                $calendar->setEnd($dateStart);
-                $calendar->setAllDay($donnees["allDay"]);
-                $calendar->setBackgroundColor($donnees["backgroundColor"]);
-                $calendar->setBorderColor($donnees["borderColor"]);
-                $calendar->setTextColor($donnees["textColor"]);
-            }else{
-                $calendar->setTitle($donnees["title"]);
-                $calendar->setDescription($donnees["description"]);
-                $calendar->setStart($dateStart);
-                $calendar->setEnd($dateEnd);
-                $calendar->setAllDay($donnees["allDay"]);
-                $calendar->setBackgroundColor($donnees["backgroundColor"]);
-                $calendar->setBorderColor($donnees["borderColor"]);
-                $calendar->setTextColor($donnees["textColor"]);
-            }
             
+            
+            $calendar->setTitle($donnees["title"]);
+            $calendar->setDescription($donnees["description"]);
+            $calendar->setStart($dateStart);
+            $calendar->setEnd($dateEnd);
+            $calendar->setAllDay($donnees["allDay"]);
+            $calendar->setBackgroundColor($donnees["backgroundColor"]);
+            $calendar->setBorderColor($donnees["borderColor"]);
+            $calendar->setTextColor($donnees["textColor"]);
+            $calendar->setDatepose($dateCourante2);
+
             $em->persist($calendar);
             $em->flush();
 

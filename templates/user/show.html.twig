@@ -5,9 +5,9 @@
 {% block body %}
 {% include "include/retourAdmin.html.twig" %}
 
-    <form method="POST" action="{{ path('user_edit',{'id':user.id}) }}">
+    <form method="POST" action="{{ path('user_edit',{'id':user.id}) }}" style="background-image: url('/assets/LuciolesBG.png');">
     {# Met en colonne #}
-    <div class="absolute w-screen h-screen flex flex-col justify-center bg-yellow-300">
+    <div class="absolute w-screen h-screen flex flex-col justify-center">
             {# Formulaire de gestion de compte #}
             <div class="px-10 p-4 shadow-2xl mx-auto rounded-2xl bg-white">
                 <div class="">

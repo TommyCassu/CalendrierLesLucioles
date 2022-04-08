@@ -38,7 +38,7 @@ body::-webkit-scroll-thumb {
       
         <div class="flex h-screen w-screen" style="background-image: url('/assets/LuciolesBG.png');">
         
-            <div id="liste" class="z-50 flex bg-[#EEEEEE] shadoww w-1/6 justify-center rounded-r-2xl">
+            <div id="liste" class="z-50 flex bg-[#feec5a] shadoww w-1/6  rounded-r-2xl">
                 <div id='external-events'>
                     
                     {# Affichage en admin #}
@@ -49,70 +49,76 @@ body::-webkit-scroll-thumb {
                         </a>
                     </div>
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div class="scroller " style="width: 300px;height: 800px;overflow-y: scroll; scrollbar-color: #eeeeee; scrollbar-width: thin;">
-                    {% for famille in listeFamille %}
-                      <h2 class=" text-center text-sm font-['Open_Sans'] mb-2">{{famille.nom}} -
-                      {% for garde in nbgarde %}
-                        {% if garde.id == famille.id %}
-                          {% if garde.nb < 5 %}
-                          <a class="text-red-500">{{garde.nb}} </a>
-                          {% else %}
-                          <a class="text-green-500">{{garde.nb}} </a>
+                    <div class="flex mx-auto w-5/6 h-3/6  bg-white border-black rounded-2xl border-4">
+                      <div class="scroller " style="width: 300px;height: 800px;overflow-y: scroll; scrollbar-color: #eeeeee; scrollbar-width: thin;">
+                      {% for famille in listeFamille %}
+                        <h2 class=" text-center text-sm font-['Open_Sans'] mb-2">{{famille.nom}} -
+                        {% for garde in nbgarde %}
+                          {% if garde.id == famille.id %}
+                            {% if garde.nb < 5 %}
+                            <a class="text-red-500">{{garde.nb}} </a>
+                            {% else %}
+                            <a class="text-green-500">{{garde.nb}} </a>
+                            {% endif %}
                           {% endif %}
+
+                        {% endfor %} Gardes </h2>
+                          <ul>
+                        {% for user in ListeUtilisateurs %}
+                        {% if famille.id == user.famille.id %}
+                        <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6 mb-1'>
+
+                            <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{user.username}} {{user.nom}} </a></div>
+                            
+                            
+                        </div>
                         {% endif %}
-
-                      {% endfor %} Gardes </h2>
-                        <ul>
-                      {% for user in ListeUtilisateurs %}
-                      {% if famille.id == user.famille.id %}
-                      <div id={{user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6 mb-1'>
-
-                          <div  id={{user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{user.username}} {{user.nom}} </a></div>
-                          
-                          
+                        {%  endfor %}
+                      {%  endfor %}  
+                      
                       </div>
-                      {% endif %}
-                      {%  endfor %}
-                    {%  endfor %}  
-                     
                     </div>
+                    
                     
 
                     {% else %}
 
                     {# Affichage en utilisateur lambda #}
                     <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Calendrier des gardes </h1>
-                    <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6'>
-                        <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{data.user.username}} {{data.user.nom}} </a></div>
-                    </div>
-                    <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
-                    <div>
-                      {% if lGarde is defined %}
-                        {% for garde in lGarde %}
-                        
-                          {% if garde.dDebut|date("Y-m-d","Europe/Paris") > ("now"|date("Y-m-d","Europe/Paris")) %}
-                            <div class='w-full mt-3 flex inline space-x-2  '>
-                              <div class="mt-1"><i class="far fa-stopwatch fa-2x ml-2" style="color: #15803d"></i></div>
-                              <div  class='h-10 text-center content-center text-green-700 font-bold mt-2 text-lg'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</div>
-                            </div>
-                          {% else %}
-                            <div class='w-full mt-3 flex inline space-x-2'>
-                            
-                              <div class="mt-1" ><i class="fas fa-check-circle fa-2x ml-2 "></i> </div>
-                              <div class='h-10 text-center content-center text-green-700 font-bold mt-2 text-lg'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</a> </div>
-                            
-                            </div>
-                          {% endif %}
-                          
-                        {% endfor %}
-                        
-                        
-                        {% else %}
-                          <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
-                            <div  class='h-10 text-center content-center text-white'>Pas de garde</div>
-                          </div>
-                      {% endif %}
+                    <div class=" w-full h-full bg-black border-4">
+                      <div id={{data.user.id}} class='mx-auto fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-[#fde843] border-[#fde843] w-4/6'>
+                          <div  id={{data.user.famille.id}} class='fc-event-main h-10 text-center content-center'><a class="font-bold text-black">{{data.user.username}} {{data.user.nom}} </a></div>
                       </div>
+                      <h1 class=" text-center text-lg font-['Open_Sans'] font-bold text-mg mt-6 mb-6">Vos gardes :</h1>
+                      <div>
+                        {% if lGarde is defined %}
+                          {% for garde in lGarde %}
+                          
+                            {% if garde.dDebut|date("Y-m-d","Europe/Paris") > ("now"|date("Y-m-d","Europe/Paris")) %}
+                              <div class='w-full mt-3 flex inline space-x-2  '>
+                                <div class="mt-1"><i class="far fa-stopwatch fa-2x ml-2" style="color: #15803d"></i></div>
+                                <div  class='h-10 text-center content-center text-green-700 font-bold mt-2 text-lg'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</div>
+                                <button id={{garde.id}} class="z-50  rounded-full " onclick="SuprGarde(this.id)"><i class="far fa-times-circle fa-2x mr-0"></i></button>
+                              </div>
+                            {% else %}
+                              <div class='w-full mt-3 flex inline space-x-2'>
+                              
+                                <div class="mt-1" ><i class="fas fa-check-circle fa-2x ml-2 "></i> </div>
+                                <div class='h-10 text-center content-center text-green-700 font-bold mt-2 text-lg'>{{garde.dDebut|date("d-m-Y",'Europe/Paris')}}</a> </div>
+                                
+                              </div>
+                            {% endif %}
+                            
+                          {% endfor %}
+                          
+                          
+                          {% else %}
+                            <div class='bg-black border-black w-3/6 mt-3 rounded-md'>
+                              <div  class='h-10 text-center content-center text-white'>Pas de garde</div>
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
                     {% endif %}  
                     <button id="tipsOpen"class="z-50 bg-[#3DB2FF] w-16 h-16 right-0 absolute top-4 mr-10 rounded-full border-black border-4 " onclick="PanelGauche();"><i class="fas fa-info fa-2x mr-0"></i></button>
                     <button id="tipsClose"style="display:none;"class="z-50 bg-[#3DB2FF] rounded-full  w-8 h-8 right-4 absolute top-4 mr-4" onclick="PanelGauche()"><i class="far fa-times-circle fa-2x mr-0"></i></button>
@@ -163,6 +169,18 @@ body::-webkit-scroll-thumb {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.6/lang-all.js" integrity="sha512-6pFj+5IaeswUqAEsJEF0I6UtYpgN80bT5vLQ8mjOBtFWJwUteCMhy4CuteT6AXsVUOSx8U05dPWUbJwUbMaNgQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {# Script au chargement de la page #}
     <script>
+
+
+    function SuprGarde(IdDeLaGarde)
+  {
+      
+      let xhr = new XMLHttpRequest
+      let url = `/api/${IdDeLaGarde}/delete`
+      xhr.open("POST", url)
+      xhr.send()
+
+      location.reload();
+  }
     // permet de transformer le nombre RGB en HexaDecimal
     function componentToHex(c) {
         var hex = c.toString(16);
@@ -239,7 +257,12 @@ body::-webkit-scroll-thumb {
   const userId = {{data.user.id}}
   
   const familleId = {{data.user.famille.id}}
+ 
+  const LUser = {{data.Luser|raw}}
   
+  
+  const sessionJSON = {{data.sessionJSON|raw}}
+  console.log(sessionJSON)
   // On vérifie le rôle de l'utilisateur connecté et on lui permet de modifier les events qui lui appartiennent
   let isAdmin
   {% for role in data.user.roles %}
@@ -247,29 +270,37 @@ body::-webkit-scroll-thumb {
       isAdmin = true
     {% endif %}
   {% endfor %}
-
+  let today = new Date();
+  
   //Autorise la modification des events pour l'utilisateur 
   events.forEach(function(event) {if (event.user_id == userId) {event.editable=true, event.overlap=false}})
 
   //Interdit La modification pour l'utilisateur de modifier une date sur elle est antérieur a la date actuelle
-  events.forEach(function(event) {var dateStart = new Date(event.start); dateStart.setDate(dateStart.getDate()-7); if (dateStart <= new Date()) {console.log(dateStart.getDate()-20),event.editable=false, event.overlap=false}})
+  events.forEach(function(event) {var DPose = new Date(event.datePose);DPose.setDate(DPose.getDate()+1);var dateStart = new Date(event.start); dateStart.setDate(dateStart.getDate()-7); if ((DPose <= today) && (dateStart <= new Date())) {event.editable=false, event.overlap=false}})
+
+  
   
   //Autorise l'admin a modifier toutes les gardes
   events.forEach(function(event) {var dateStart = new Date(event.start); if (isAdmin) {event.editable=true, event.overlap=false}})
   
   // Color en bleu les gardes de l'utilisateur connecté sur le calendrier
-  events.forEach(function(event) {var dateStart = new Date(event.start); var dateEnd = new Date(event.end);if (event.user_id == userId && dateStart == dateEnd) {event.backgroundColor='#ffe000', event.borderColor='#000000',  img='/assets/jsp.png'}})
+  events.forEach(function(event) {var titre = event.title;if (event.user_id == userId && titre.includes(LUser.username) && titre.includes(LUser.nom)) {event.backgroundColor='#ffe000', event.borderColor='#000000'}})
+  
+
 
   // Interdit la superposition de deux gardes
   events.forEach(function(event) {if (true) {event.overlap=false}})
 
+  
 
 
 
 // Création de calendrier avec les différentes options que l'on choisis
   var calendar = new Calendar(calendarEl, {
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-    inialView: 'dayGridMonth',
+    initialView: 'dayGridMonth',
+    initialDate: sessionJSON.DateDuDebut,
+    
     validRange: {
     start: AnneeCalendrier.DateDebutCalendrier,
     end: AnneeCalendrier.DateFinCalendrier
@@ -285,14 +316,22 @@ body::-webkit-scroll-thumb {
       right: 'next'
     },
     events: events,
+    eventClick: function(info) {
+    console.log(info.event._def.publicId)
+  },
+  eventRender: function (event, element, icon) {
+                        
+                            element.find('.fc-event-title').append("id=" + event.id +
+                               "");
+                        
+                    }, 
     droppable: true,
     {% for role in data.user.roles %}
     {% if role == "ROLE_ADMIN" %}  
     select: function(info) {
         let url = `/api/create`
         var titleVacation = prompt('Entrez le nom des vacances:')
-        //alert('selected ' + info.startStr + ' to ' + info.endStr+ url);
-
+        let today = new Date();
         let vacances = {
               "title":titleVacation,
               "user_id":userId,
@@ -304,13 +343,14 @@ body::-webkit-scroll-thumb {
               "allDay":1,
               "end":info.endStr,
               "famille_id":familleId,
+              "datePose":today,
           }
-          console.log(info.startStr)
+          
           let xhr = new XMLHttpRequest
           xhr.open("POST", url)
           xhr.send(JSON.stringify(vacances))
 
-          
+          //location.reload();
         
       }
     {% endif %}
@@ -325,14 +365,15 @@ body::-webkit-scroll-thumb {
                     "title":e.event.title,
                     "description":e.event.extendedProps.description,
                     "start":e.event.start,
-                    "end":e.event.end,
+                    //Trouver où est le end de façon plus propre
+                    "end":e.event._instance.range.end,
                     "backgroundColor":e.event.backgroundColor,
                     "borderColor":e.event.borderColor,
                     "textColor":e.event.textColor,
                     "allDay":e.event.allDay,
                 }
+                
                 let xhr = new XMLHttpRequest
-
                 xhr.open("POST", url)
                 xhr.send(JSON.stringify(donnees))
                 location.reload();
@@ -361,17 +402,21 @@ body::-webkit-scroll-thumb {
               "textColor":'#000000',
               "allDay":e.allDay,
               "end":e.date,
+              
           }
               // Envoie sous forme de requête post les données
-              console.log(e.date)
+              
               let xhr = new XMLHttpRequest
               xhr.open("POST", url)
               xhr.send(JSON.stringify(donnees))
-            
-        location.reload();
+        
+        if(e.date < (new Date()) && !isAdmin ){
+          alert("Vous ne pouvez pas poser de garde à une date antérieure à la date actuelle");
+        }
+        location.reload();  
     })
           
-
+    
     //Supression d'un évènement lorsque l'on de drag and drop depuis le calendrier jusqu'a la zone grise a gauche
     calendar.on('eventDragStop', (e) => {    
         let trashEl = document.getElementById('liste');
@@ -390,11 +435,10 @@ body::-webkit-scroll-thumb {
                 xhr.open("POST", url)
                 xhr.send()
                 event.remove()
-                //location.reload();
+                location.reload();
         }
         
     })
-    
 
   calendar.render();
 
